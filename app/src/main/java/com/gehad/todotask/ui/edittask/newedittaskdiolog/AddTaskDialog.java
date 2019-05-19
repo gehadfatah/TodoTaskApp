@@ -7,7 +7,7 @@ import android.support.design.widget.TextInputEditText;
 import android.widget.Button;
 
 import com.gehad.todotask.R;
-import com.gehad.todotask.app.App;
+import com.gehad.todotask.app.TodoApp;
 import com.gehad.todotask.domain.model.Task;
 import com.gehad.todotask.ui.base.BaseMvpDialog;
 import com.gehad.todotask.ui.edittask.EditTaskDiologPresenter;
@@ -47,7 +47,7 @@ public class AddTaskDialog extends BaseMvpDialog<EditTaskDiologPresenter> implem
 
     @Override
     public EditTaskDiologPresenter createPresenter() {
-        return App.getAppComponent(getContext()).addTaskDiaologComponent().getPresenter();
+        return TodoApp.getAppComponent(getContext()).addTaskDiaologComponent().getPresenter();
     }
 
     @OnClick(R.id.createBtn)

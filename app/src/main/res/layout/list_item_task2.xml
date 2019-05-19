@@ -47,6 +47,7 @@
             android:layout_toEndOf="@+id/cbItemCheck"
             android:fontFamily="sans-serif"
             android:padding="4dip"
+
             android:textColor="@android:color/black"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -55,10 +56,11 @@
             android:id="@+id/tvItemPriority"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/tvItem"
             android:layout_alignParentEnd="true"
             android:fontFamily="sans-serif"
+            android:gravity="center"
             android:padding="4dip"
+            android:layout_centerVertical="true"
             android:textColor="@color/gradient_center"
             android:textSize="16sp"
             tools:ignore="RelativeOverlap" />

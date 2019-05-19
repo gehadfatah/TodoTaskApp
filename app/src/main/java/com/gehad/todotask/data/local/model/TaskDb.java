@@ -12,6 +12,7 @@ public class TaskDb {
 
     @PrimaryKey(autoGenerate = true)
     private final long id;
+    private final int priority;
 
     private final String title;
     private final String userId;
@@ -25,13 +26,15 @@ public class TaskDb {
     @ColumnInfo(name = "due_date")
     private final LocalDate dueDate;
 
-    public TaskDb(long id, String title, String description, boolean isDone, @Nullable LocalDate dueDate,String userId) {
+    public TaskDb(long id, String title, String description, int priority, boolean isDone, @Nullable LocalDate dueDate, String userId) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.isDone = isDone;
         this.dueDate = dueDate;
         this.userId = userId;
+        this.priority = priority;
+
     }
 
     public long getId() {
@@ -45,12 +48,17 @@ public class TaskDb {
     public String getTitle() {
         return title;
     }
+
     public String getUserId() {
         return userId;
     }
 
     public String getDescription() {
         return description;
+    }
+
+    public int getPriority() {
+        return priority;
     }
 
     @Nullable

@@ -1,16 +1,14 @@
-package com.gehad.todotask.ui.edittask;
+package com.gehad.todotask.ui.edittask.newEdittask;
 
 import android.support.annotation.Nullable;
 
 import com.gehad.todotask.common.RxTransformers;
 import com.gehad.todotask.domain.TaskController;
-import com.gehad.todotask.domain.model.ChecklistItem;
 import com.gehad.todotask.domain.model.Task;
 import com.gehad.todotask.ui.base.BasePresenter;
+import com.gehad.todotask.ui.edittask.newEdittask.EditTaskViewNew;
 
 import org.threeten.bp.LocalDate;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -38,19 +36,9 @@ public class EditTaskPresenterNew extends BasePresenter<EditTaskViewNew> {
         getMvpView().setTaskDueDate(localDate);
     }
 
-    public void setupWithTask(@Nullable Task task) {
 
-            getMvpView().setupWithTaskToEdit(task);
 
-    }
-
-    public void saveTask() {
-        Task task = getMvpView().getTaskToSave();
-        updateTask(task);
-
-    }
-
-    private void updateTask(Task task) {
+    public void updateTask(Task task) {
         disposables.add(taskController.updateTaskOnly(task)
                 .compose(RxTransformers.applyCompletableIoSchedulers())
                 .subscribe(
@@ -60,5 +48,12 @@ public class EditTaskPresenterNew extends BasePresenter<EditTaskViewNew> {
         );
     }
 
+    public void deleteTask(Task task) {
+        disposables.add(
+                taskController.deleteTask(task)
+                        .compose(RxTransformers.applyCompletableIoSchedulers())
+                        .subscribe(() -> getMvpView().showTaskDeletedMessage(task.getTitle()),
+                                throwable -> Timber.e(throwable, "Error while deleting task")));
+    }
 
 }

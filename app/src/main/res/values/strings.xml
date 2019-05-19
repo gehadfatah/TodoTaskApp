@@ -26,4 +26,6 @@
     <string name="username">USERNAME</string>
     <string name="usernameTasks">Ahmed\'s Tasks</string>
     <string name="task_title2">TASK TITLE</string>
+    <string name="type_a_message">COMMENT</string>
+
 </resources>

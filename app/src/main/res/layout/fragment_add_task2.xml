@@ -1,66 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:fitsSystemWindows="true">
-
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/appbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <!-- <android.support.v7.widget.Toolbar
-             android:id="@+id/toolbar"
-             android:layout_width="match_parent"
-             android:layout_height="?attr/actionBarSize"
-             android:background="?attr/colorPrimary"
-             app:popupTheme="@style/AppTheme.PopupOverlay"/>-->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_gravity="center"
-            android:background="@color/blurLight"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_arrow_back_black_24dp" />
-
-            <TextView
-                android:id="@+id/taskName"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/usernameTasks"
-                android:textColor="@color/black1"
-                android:textSize="@dimen/textSize_21sp"
-                android:textStyle="bold" />
-            <RelativeLayout
-                android:layout_width="60dp"
-                android:layout_height="match_parent">
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_centerInParent="true"
-                    android:src="@drawable/ic_delete_black_24dp" />
-
-            </RelativeLayout>
-
-             </LinearLayout>
-
-    </android.support.design.widget.AppBarLayout>
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -75,6 +23,7 @@
                 android:textSize="@dimen/textSize_21sp" />
 
             <android.support.v7.widget.AppCompatCheckBox
+                android:id="@+id/cbItemCheck"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true" />
@@ -99,13 +48,15 @@
                 android:text="@string/date"
                 android:textSize="@dimen/textSize_21sp" />
 
-            <android.support.design.widget.TextInputEditText
+            <TextView
                 android:id="@+id/dateTv"
-                android:background="@null"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
+                android:background="@null"
+                android:text="Pick Date"
                 android:textColor="@color/colorLinkedInBg"
+                android:textSize="@dimen/textSize_16sp"
                 tools:text="@string/date1" />
         </RelativeLayout>
 
@@ -123,6 +74,7 @@
 
 
             <TextView
+                android:id="@+id/prTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/priority"
@@ -133,9 +85,13 @@
                 android:id="@+id/spinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
+                android:layout_alignEnd="@+id/prTv"
                 android:layout_alignParentEnd="true"
-                android:spinnerMode="dropdown" />
+                android:animateLayoutChanges="true"
+                android:focusable="false"
+                android:gravity="center"
+                android:spinnerMode="dropdown"
+                android:visibility="visible" />
         </RelativeLayout>
 
         <LinearLayout
@@ -148,19 +104,53 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="20dp"
             android:layout_marginTop="15dp"
+            android:paddingStart="20dp"
             android:text="Comments"
             android:textSize="@dimen/textSize_21sp" />
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/check_list_recycler"
+            android:id="@+id/comment_list_recycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="20dp"
-            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            android:padding="20dp" />
 
     </LinearLayout>
 
-</android.support.design.widget.CoordinatorLayout>
+    <RelativeLayout
+        android:id="@+id/send_layout"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:background="@color/gray_light"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/edit_text_message"
+            android:layout_width="match_parent"
+            android:layout_marginEnd="80dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="10dp"
+            android:layout_centerVertical="true"
+            android:background="@drawable/raduis_all"
+            android:hint="@string/type_a_message"
+            android:imeOptions="actionSend"
+            android:inputType="text"
+            android:maxLines="1"
+            android:padding="5dp" />
+
+        <ImageButton
+            android:id="@+id/send_button"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="5dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="10dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_send2" />
+    </RelativeLayout>
+</RelativeLayout>

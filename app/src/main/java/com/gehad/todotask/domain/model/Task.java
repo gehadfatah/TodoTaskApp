@@ -15,6 +15,7 @@ public class Task implements Parcelable {
 
     private final String title;
     private final String userId;
+    private final int priority;
 
     private final String description;
 
@@ -24,13 +25,15 @@ public class Task implements Parcelable {
     private final LocalDate dueDate;
 
     private final List<ChecklistItem> checklistItemList;
+    private final List<CommentTodo> commentTodoList;
 
     private Task(long id, String title,String userId, String description,
-                 boolean isDone, @Nullable LocalDate dueDate, List<ChecklistItem> checklistItemList) {
+                 boolean isDone, @Nullable LocalDate dueDate, List<ChecklistItem> checklistItemList,int priority) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.isDone = isDone;
+        this.priority = priority;
         this.dueDate = dueDate;
         this.userId = userId;
         this.checklistItemList = checklistItemList;
@@ -38,6 +41,9 @@ public class Task implements Parcelable {
 
     public long getId() {
         return id;
+    }
+    public int getPriority() {
+        return priority;
     }
 
     public String getTitle() {
@@ -63,10 +69,14 @@ public class Task implements Parcelable {
     public List<ChecklistItem> getChecklistItemList() {
         return checklistItemList;
     }
+    public List<CommentTodo> getCommentlistItemList() {
+        return checklistItemList;
+    }
 
     public static class Builder {
 
         private long id;
+        private int priority;
         private String title;
         private String userId;
         private String description;
@@ -76,6 +86,10 @@ public class Task implements Parcelable {
 
         public Builder setId(long id) {
             this.id = id;
+            return this;
+        }
+        public Builder setPriority(int priority) {
+            this.priority = priority;
             return this;
         }
 
@@ -108,7 +122,7 @@ public class Task implements Parcelable {
         }
 
         public Task build() {
-            return new Task(id, title, userId,description, isDone, dueDate, checklistItemList);
+            return new Task(id, title, userId,description, isDone, dueDate, checklistItemList,priority);
         }
     }
 
@@ -120,6 +134,7 @@ public class Task implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(this.id);
+        dest.writeInt(this.priority);
         dest.writeString(this.title);
         dest.writeString(this.userId);
         dest.writeString(this.description);
@@ -130,6 +145,7 @@ public class Task implements Parcelable {
 
     protected Task(Parcel in) {
         this.id = in.readLong();
+        this.priority = in.readInt();
         this.title = in.readString();
         this.userId = in.readString();
         this.description = in.readString();

@@ -43,7 +43,7 @@ public class TaskViewHolder extends BaseViewHolder<Task> implements Toolbar.OnMe
     FrameLayout deleteLayout;
 
     private Task currentTask;
-
+    private static final String[] Priority = {"Law", "Medium", "High"};
     public TaskViewHolder(ViewGroup parent, TaskEditListener taskEditListener,
                           TaskDeleteListener taskDeleteListener, TaskDoneListener taskDoneListener) {
         super(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_task2, parent, false));
@@ -57,8 +57,23 @@ public class TaskViewHolder extends BaseViewHolder<Task> implements Toolbar.OnMe
     @Override
     public void bind(Task item) {
         this.currentTask = item;
+
         doneCheckbox.setChecked(item.isDone());
         titleTextView.setText(item.getTitle());
+        switch (item.getPriority()) {
+            case 0:
+                tvItemPriority.setText(Priority[0]);
+
+                break;
+            case 1:
+                tvItemPriority.setText(Priority[1]);
+
+                break;
+            case 2:
+                tvItemPriority.setText(Priority[2]);
+
+                break;
+        }
         task_view_Rel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

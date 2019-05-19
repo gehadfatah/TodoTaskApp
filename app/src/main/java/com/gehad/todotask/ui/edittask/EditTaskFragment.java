@@ -13,7 +13,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import com.gehad.todotask.R;
-import com.gehad.todotask.app.App;
+import com.gehad.todotask.app.TodoApp;
 import com.gehad.todotask.domain.model.ChecklistItem;
 import com.gehad.todotask.domain.model.Task;
 import com.gehad.todotask.ui.base.BaseMvpFragment;
@@ -62,7 +62,7 @@ public class EditTaskFragment extends BaseMvpFragment<EditTaskPresenter>
 
     @Override
     protected EditTaskPresenter createPresenter() {
-        return App.getAppComponent(getContext()).addTaskFragmentComponent().getPresenter();
+        return TodoApp.getAppComponent(getContext()).addTaskFragmentComponent().getPresenter();
     }
 
     @Override

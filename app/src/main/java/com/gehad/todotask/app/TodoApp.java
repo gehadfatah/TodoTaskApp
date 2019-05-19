@@ -5,17 +5,16 @@ import android.content.Context;
 
 import com.facebook.stetho.Stetho;
 import com.jakewharton.threetenabp.AndroidThreeTen;
-import com.squareup.leakcanary.LeakCanary;
 
 import com.gehad.todotask.BuildConfig;
 import timber.log.Timber;
 
-public class App extends Application {
+public class TodoApp extends Application {
 
     private ApplicationComponent appComponent;
 
     public static ApplicationComponent getAppComponent(Context context) {
-        return ((App) context.getApplicationContext()).appComponent;
+        return ((TodoApp) context.getApplicationContext()).appComponent;
     }
 
     @Override

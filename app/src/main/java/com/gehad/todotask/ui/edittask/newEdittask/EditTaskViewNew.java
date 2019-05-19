@@ -1,4 +1,4 @@
-package com.gehad.todotask.ui.edittask;
+package com.gehad.todotask.ui.edittask.newEdittask;
 
 import com.gehad.todotask.domain.model.ChecklistItem;
 import com.gehad.todotask.domain.model.Task;
@@ -13,10 +13,7 @@ interface EditTaskViewNew extends MvpView {
     void setTaskDueDate(LocalDate localDate);
 
     void finish();
+    void showTaskDeletedMessage(String taskTitle);
 
-    void setupWithTaskToEdit(Task task);
-
-
-    Task getTaskToSave();
 
 }

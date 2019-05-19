@@ -13,14 +13,12 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 import com.gehad.todotask.R;
-import com.gehad.todotask.app.App;
+import com.gehad.todotask.app.TodoApp;
 import com.gehad.todotask.common.ItemOffsetDecoration;
 import com.gehad.todotask.domain.model.Task;
 import com.gehad.todotask.ui.base.BaseMvpFragment;
-import com.gehad.todotask.ui.edittask.EditTaskActivity;
-import com.gehad.todotask.ui.edittask.EditTaskActivityNew;
+import com.gehad.todotask.ui.edittask.newEdittask.EditTaskActivityNew;
 import com.gehad.todotask.ui.edittask.newedittaskdiolog.AddTaskDialog;
-import com.gehad.todotask.ui.edittask.newedittaskdiolog.EditTaskDialogView;
 import com.gehad.todotask.ui.tasks.adapter.FilterChangeListener;
 import com.gehad.todotask.ui.tasks.adapter.TaskDeleteListener;
 import com.gehad.todotask.ui.tasks.adapter.TaskDoneListener;
@@ -66,7 +64,7 @@ public class TasksFragment extends BaseMvpFragment<TasksPresenter>
 
     @Override
     protected TasksPresenter createPresenter() {
-        return App.getAppComponent(getContext()).tasksFragmentComponent().getPresenter();
+        return TodoApp.getAppComponent(getContext()).tasksFragmentComponent().getPresenter();
     }
 
     @Override

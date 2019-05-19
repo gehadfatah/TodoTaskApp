@@ -23,22 +23,11 @@ import com.gehad.todotask.ui.edittask.adapter.model.TaskDataCollector;
 import com.gehad.todotask.ui.base.BaseViewHolder;
 import com.gehad.todotask.ui.login.LoginActivity;
 
-public class TaskHeaderItemViewHolder extends BaseViewHolder<TaskDataCollector> {
+public class TaskHeaderItemViewHolder  extends BaseViewHolder<TaskDataCollector> {
 
-/*    @BindView(R.id.title_edit_text)
-    TextInputEditText titleEditText;*/
-  /*  @BindView(R.id.description_edit_text)
-    TextInputEditText descriptionEditText;*/
-    @BindView(R.id.dateTv)
-    EditText dueDateTextView;
-    @BindView(R.id.cbItemCheck)
-    CheckBox doneCheckbox;
-    @BindView(R.id.tvItemPriority)
-    TextView tvItemPriority;
-    @BindView(R.id.spinner)
-     Spinner spinner;
-    private static final String[] Priority = {"law", "medium","high"};
-
+    @BindView(R.id.title_edit_text) TextInputEditText titleEditText;
+    @BindView(R.id.description_edit_text) TextInputEditText descriptionEditText;
+    @BindView(R.id.due_date_edit_text) EditText dueDateTextView;
 
     private final DueDateRequestListener dueDateRequestListener;
 
@@ -46,7 +35,7 @@ public class TaskHeaderItemViewHolder extends BaseViewHolder<TaskDataCollector> 
     private TaskDataCollector currentTask;
 
     TaskHeaderItemViewHolder(ViewGroup parent, DueDateRequestListener dueDateRequestListener) {
-        super(LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_add_task2, parent, false));
+        super(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_task_description, parent, false));
         this.dueDateRequestListener = dueDateRequestListener;
 
         disableDueDateEditTextEditAbility();
@@ -59,11 +48,8 @@ public class TaskHeaderItemViewHolder extends BaseViewHolder<TaskDataCollector> 
     @Override
     public void bind(TaskDataCollector item) {
         currentTask = item;
-        //titleEditText.setText(item.getTitle());
-        //descriptionEditText.setText(item.getDescription());
-       // spinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, Priority));
-
-
+        titleEditText.setText(item.getTitle());
+        descriptionEditText.setText(item.getDescription());
         final LocalDate dueDate = item.getDueDate();
         if (dueDate != null) {
             String formattedDate = LocalDateFormatterUtil.getShortMonthDayAndYearFormattedDate(item.getDueDate());
@@ -71,20 +57,19 @@ public class TaskHeaderItemViewHolder extends BaseViewHolder<TaskDataCollector> 
         }
     }
 
-    /*@OnTextChanged(R.id.title_edit_text)
+    @OnTextChanged(R.id.title_edit_text)
     void onTitleTextChange(CharSequence charSequence) {
         if (currentTask != null) {
             currentTask.setTitle(charSequence.toString());
-            currentTask.setuserId(LoginActivity.user_name);
         }
-    }*/
+    }
 
-    /*@OnTextChanged(R.id.description_edit_text)
+    @OnTextChanged(R.id.description_edit_text)
     void onDescriptionChange(CharSequence charSequence) {
         if (currentTask != null) {
             currentTask.setDescription(charSequence.toString());
         }
-    }*/
+    }
 
     @OnClick(R.id.due_date_edit_text)
     void onDueDateClick() {

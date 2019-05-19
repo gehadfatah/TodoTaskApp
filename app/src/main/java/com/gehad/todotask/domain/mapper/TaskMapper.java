@@ -15,7 +15,7 @@ public class TaskMapper {
 
     public static TaskDb toTaskDb(Task task) {
         return new TaskDb(task.getId(), task.getTitle(),
-                task.getDescription(), task.isDone(),
+                task.getDescription(),task.getPriority(), task.isDone(),
                 task.getDueDate(),task.getUserId());
     }
 
@@ -26,6 +26,7 @@ public class TaskMapper {
                 .setTitle(taskDb.getTitle())
                 .setUserId(taskDb.getUserId())
                 .setDescription(taskDb.getDescription())
+                .setPriority(taskDb.getPriority())
                 .setIsDone(taskDb.isDone())
                 .setDueDate(taskDb.getDueDate())
                 .setChecklistItemList(checklistItems)

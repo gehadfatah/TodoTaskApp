@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -44,7 +45,7 @@ public class LoginActivity extends BaseActivity {
 
     @OnClick(R.id.login_btn)
     public void loginClick() {
-        if (!userName.getText().toString().equals("")) {
+        if (!userName.getText().toString().equals("")|| TextUtils.isEmpty(userName.getText())) {
             loginStatus.setVisibility(View.INVISIBLE);
 
             user_name = userName.getText().toString();

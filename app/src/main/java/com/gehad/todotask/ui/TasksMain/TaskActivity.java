@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.gehad.todotask.R;
 import com.gehad.todotask.ui.base.BaseActivity;
@@ -22,10 +23,14 @@ public class TaskActivity extends BaseActivity {
 
     @BindView(R.id.filterDoneImg)
     ImageView filterDoneImg;
+    @BindView(R.id.userName)
+    TextView userName;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         userId = getIntent().getStringExtra("userId");
+        userName.setText(String.format("%s's Tasks", userId == null ? "" : userId));
         setFragment();
 
     }
