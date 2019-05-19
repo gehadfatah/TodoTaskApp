@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <TextView
@@ -9,14 +9,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/black1"
-        android:layout_marginTop="@dimen/padding_15"
+        android:text="kdjkfla"
         android:textSize="@dimen/textSize_16sp" />
 
     <TextView
         android:id="@+id/timeTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/padding_15"
         android:textColor="@color/gray_category"
-        android:textSize="@dimen/textSize_16sp" />
+        android:layout_marginTop="@dimen/padding_xx"
+        android:textSize="@dimen/textSize_16sp"
+        android:text="jfj"/>
 </LinearLayout>

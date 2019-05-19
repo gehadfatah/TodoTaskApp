@@ -9,21 +9,23 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.gehad.todotask.R;
-import com.gehad.todotask.domain.model.CommentTodo;
+import com.gehad.todotask.common.LocalDateFormatterUtil;
+import com.gehad.todotask.domain.model.CommentlistItem;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHolder> {
-    private ArrayList<CommentTodo> commentTodosList;
+    private ArrayList<CommentlistItem> commentTodosList;
     private Context context;
 
-    public CommentAdapter(Context context, ArrayList<CommentTodo> commentTodosList
+    public CommentAdapter(Context context, List<CommentlistItem> commentTodosList
     ) {
         super();
-        this.commentTodosList = commentTodosList;
+        this.commentTodosList =(ArrayList<CommentlistItem>) commentTodosList;
         this.context = context;
 
 
@@ -41,9 +43,13 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
-        final CommentTodo commentTodo = commentTodosList.get(position);
-        holder.commentTv.setText(commentTodo.getDescription());
-        holder.timeTv.setText(commentTodo.getDate());
+        final CommentlistItem commentTodo = commentTodosList.get(position);
+        holder.commentTv.setText(commentTodo.getdescription());
+        //holder.timeTv.setText(commentTodo.getDueDate().toString());
+
+        if (commentTodo.getDueDate() != null) {
+            holder.timeTv.setText(LocalDateFormatterUtil.getShortMonthDayAndYearFormattedDate(commentTodo.getDueDate()));
+        }
 
     }
 

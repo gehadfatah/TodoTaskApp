@@ -10,7 +10,6 @@ import com.gehad.todotask.R;
 import com.gehad.todotask.app.TodoApp;
 import com.gehad.todotask.domain.model.Task;
 import com.gehad.todotask.ui.base.BaseMvpDialog;
-import com.gehad.todotask.ui.edittask.EditTaskDiologPresenter;
 import com.gehad.todotask.ui.edittask.adapter.CheckListAdapter;
 import com.gehad.todotask.ui.edittask.adapter.DueDateRequestListener;
 import com.gehad.todotask.ui.login.LoginActivity;
@@ -21,7 +20,7 @@ import butterknife.OnClick;
 
 public class AddTaskDialog extends BaseMvpDialog<EditTaskDiologPresenter> implements DueDateRequestListener, EditTaskDialogView {
     Context context;
-    private CheckListAdapter checkListAdapter;
+   // private CheckListAdapter checkListAdapter;
 
     @BindView(R.id.taskTitleEd)
     TextInputEditText taskTitleEd;
@@ -74,16 +73,9 @@ public class AddTaskDialog extends BaseMvpDialog<EditTaskDiologPresenter> implem
 
     }
 
-    @Override
-    public void setupViewToCreateNewTask() {
-        checkListAdapter = new CheckListAdapter(this);
 
-    }
 
-    @Override
-    public Task getTaskToSave() {
-        return checkListAdapter.getTask();
-    }
+
 
     @Override
     public void finish() {

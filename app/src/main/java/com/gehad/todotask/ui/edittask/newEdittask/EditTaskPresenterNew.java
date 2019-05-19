@@ -4,11 +4,15 @@ import android.support.annotation.Nullable;
 
 import com.gehad.todotask.common.RxTransformers;
 import com.gehad.todotask.domain.TaskController;
+import com.gehad.todotask.domain.model.ChecklistItem;
+import com.gehad.todotask.domain.model.CommentlistItem;
 import com.gehad.todotask.domain.model.Task;
 import com.gehad.todotask.ui.base.BasePresenter;
 import com.gehad.todotask.ui.edittask.newEdittask.EditTaskViewNew;
 
 import org.threeten.bp.LocalDate;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -55,5 +59,13 @@ public class EditTaskPresenterNew extends BasePresenter<EditTaskViewNew> {
                         .subscribe(() -> getMvpView().showTaskDeletedMessage(task.getTitle()),
                                 throwable -> Timber.e(throwable, "Error while deleting task")));
     }
-
+    public void updateTaskwithcomments(Task task, List<CommentlistItem> commentlistItemList) {
+        disposables.add(taskController.updateTaskWithCommentlist(task, commentlistItemList)
+                .compose(RxTransformers.applyCompletableIoSchedulers())
+                .subscribe(
+                        getMvpView()::finish,
+                        throwable -> Timber.e(throwable, "Error while updating task")
+                )
+        );
+    }
 }

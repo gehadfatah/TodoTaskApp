@@ -8,10 +8,13 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import com.gehad.todotask.data.local.model.ChecklistItemDb;
+import com.gehad.todotask.data.local.model.CommentlistItemDb;
 import com.gehad.todotask.data.local.model.TaskDb;
 import com.gehad.todotask.domain.mapper.ChecklistItemMapper;
+import com.gehad.todotask.domain.mapper.CommentlistItemMapper;
 import com.gehad.todotask.domain.mapper.TaskMapper;
 import com.gehad.todotask.domain.model.ChecklistItem;
+import com.gehad.todotask.domain.model.CommentlistItem;
 import com.gehad.todotask.domain.model.Task;
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
@@ -74,7 +77,29 @@ public class TasksRepository {
                 }
         );
     }
+    public Completable updateTaskWithComments(Task task,  List<CommentlistItem> commentlistItemList) {
+        return Completable.fromAction(() -> {
+                    TaskDb taskDb = TaskMapper.toTaskDb(task);
+                    appDatabase.beginTransaction();
+                    try {
+                        appDatabase.tasksDao().updateTask(taskDb);
 
+                      /*  List<ChecklistItemDb> checklistItemDbsToDelete =
+                                ChecklistItemMapper.toChecklistItemDbList(task.getId(), checklistItemsToDelete);
+                        appDatabase.checklistDao().deleteAll(checklistItemDbsToDelete);*/
+
+
+                        List<CommentlistItemDb> toCommentItemDbsToAdd =
+                                CommentlistItemMapper.toCommentlistItemDbList(task.getId(), commentlistItemList);
+                        appDatabase.commentlistDao().insertAll(toCommentItemDbsToAdd);
+
+                        appDatabase.setTransactionSuccessful();
+                    } finally {
+                        appDatabase.endTransaction();
+                    }
+                }
+        );
+    }
     public Completable updateTaskOnly(Task task) {
         return Completable.fromAction(() -> {
             TaskDb taskDb = TaskMapper.toTaskDb(task);
@@ -101,20 +126,15 @@ public class TasksRepository {
         return appDatabase.tasksDao().getDoneTasks()
                 .flatMapSingle(this::getTasksWithChecklistFromTaskDbs);
     }
-    public Single<List<Task>> getToDoTasksSingle() {
-        return appDatabase.tasksDao().getToDoTasksSingle()
-                .flatMap(this::getTasksWithChecklistFromTaskDbs);
-    }
 
-    public Single<List<Task>> getDoneTasksSingle() {
-        return appDatabase.tasksDao().getDoneTasksSingle()
-                .flatMap(this::getTasksWithChecklistFromTaskDbs);
-    }
     public Flowable<List<Task>> getAllTasks(String  userid) {
         return appDatabase.tasksDao().getAllTasks(userid)
                 .flatMapSingle(this::getTasksWithChecklistFromTaskDbs);
     }
-
+    public Flowable<List<Task>> getAllTasksWithComments(String  userid) {
+        return appDatabase.tasksDao().getAllTasks(userid)
+                .flatMapSingle(this::getTasksWithCommentlistFromTaskDbs);
+    }
     public Flowable<List<Task>> getTasksWithDueDateBefore(LocalDate date) {
         return appDatabase.tasksDao().getTaskWithDueDateBefore(date)
                 .flatMapSingle(this::getTasksWithChecklistFromTaskDbs);
@@ -123,6 +143,9 @@ public class TasksRepository {
     private Single<List<ChecklistItemDb>> getSingleCheckListItems(TaskDb taskDb) {
         return appDatabase.checklistDao().getChecklistItems(taskDb.getId()).firstOrError();
     }
+    private Single<List<CommentlistItemDb>> getSingleCommentListItems(TaskDb taskDb) {
+        return appDatabase.commentlistDao().getCommentlistItems(taskDb.getId()).firstOrError();
+    }
 
     private Single<List<Task>> getTasksWithChecklistFromTaskDbs(List<TaskDb> taskDbs) {
         return Flowable.fromIterable(taskDbs)
@@ -130,7 +153,23 @@ public class TasksRepository {
                     @Override
                     public SingleSource<? extends Task> apply(TaskDb taskDb) throws Exception {
                         return TasksRepository.this.getSingleCheckListItems(taskDb)
-                                .map(checklistItemDbs -> TaskMapper.fromTaskDbAndChecklistDbList(taskDb, checklistItemDbs));
+                                .map(new Function<List<ChecklistItemDb>, Task>() {
+                                    @Override
+                                    public Task apply(List<ChecklistItemDb> checklistItemDbs) throws Exception {
+                                        return TaskMapper.fromTaskDbAndChecklistDbList(taskDb, checklistItemDbs);
+                                    }
+                                });
+                    }
+                }, false, 1)
+                .toList();
+    }
+    private Single<List<Task>> getTasksWithCommentlistFromTaskDbs(List<TaskDb> taskDbs) {
+        return Flowable.fromIterable(taskDbs)
+                .flatMapSingle(new Function<TaskDb, SingleSource<? extends Task>>() {
+                    @Override
+                    public SingleSource<? extends Task> apply(TaskDb taskDb) throws Exception {
+                        return TasksRepository.this.getSingleCommentListItems(taskDb)
+                                .map(commentlistItemDbs -> TaskMapper.fromTaskDbAndCommentlistDbList(taskDb, commentlistItemDbs));
                     }
                 }, false, 1)
                 .toList();

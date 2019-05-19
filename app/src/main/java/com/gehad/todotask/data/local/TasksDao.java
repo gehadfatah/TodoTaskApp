@@ -25,12 +25,10 @@ public interface TasksDao {
 
     @Query("SELECT * FROM task WHERE is_done = 0")
     Flowable<List<TaskDb>> getToDoTasks();
-    @Query("SELECT * FROM task WHERE is_done = 0")
-    Single<List<TaskDb>> getToDoTasksSingle();
+
     @Query("SELECT * FROM task WHERE is_done = 1")
     Flowable<List<TaskDb>> getDoneTasks();
-    @Query("SELECT * FROM task WHERE is_done = 1")
-    Single<List<TaskDb>> getDoneTasksSingle();
+
     @Query("SELECT * FROM task WHERE userId=:userId")
     Flowable<List<TaskDb>> getAllTasks(String userId);
     @Query("SELECT * FROM task WHERE is_done = 0 AND due_date < :localDate")

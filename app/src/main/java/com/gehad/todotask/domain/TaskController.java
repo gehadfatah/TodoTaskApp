@@ -8,6 +8,7 @@ import javax.inject.Inject;
 
 import com.gehad.todotask.data.local.TasksRepository;
 import com.gehad.todotask.domain.model.ChecklistItem;
+import com.gehad.todotask.domain.model.CommentlistItem;
 import com.gehad.todotask.domain.model.Task;
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
@@ -30,6 +31,9 @@ public class TaskController {
                                                List<ChecklistItem> checklistItemsToUpdate, List<ChecklistItem> checklistItemsToAdd) {
         return tasksRepository.updateTask(task, checklistItemsToDelete, checklistItemsToUpdate, checklistItemsToAdd);
     }
+    public Completable updateTaskWithCommentlist(Task task,   List<CommentlistItem> commentlistItemList) {
+        return tasksRepository.updateTaskWithComments(task, commentlistItemList);
+    }
 
     public Completable updateTaskOnly(Task task) {
         return tasksRepository.updateTaskOnly(task);
@@ -45,12 +49,10 @@ public class TaskController {
     public Flowable<List<Task>> getAllTasks(String userId) {
         return tasksRepository.getAllTasks(userId);
     }
-    public Single<List<Task>> getDoneTasksSingle() {
-        return tasksRepository.getDoneTasksSingle();
+    public Flowable<List<Task>> getAllTasksWithComments(String userId) {
+        return tasksRepository.getAllTasksWithComments(userId);
     }
-    public Single<List<Task>> getToDoTasksSingle() {
-        return tasksRepository.getToDoTasksSingle();
-    }
+
     public Flowable<List<Task>> getTasksWithDueDateBefore(LocalDate localDate) {
         return tasksRepository.getTasksWithDueDateBefore(localDate);
     }

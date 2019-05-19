@@ -25,10 +25,10 @@ public class Task implements Parcelable {
     private final LocalDate dueDate;
 
     private final List<ChecklistItem> checklistItemList;
-    private final List<CommentTodo> commentTodoList;
+    private final List<CommentlistItem> commentlistItemList;
 
     private Task(long id, String title,String userId, String description,
-                 boolean isDone, @Nullable LocalDate dueDate, List<ChecklistItem> checklistItemList,int priority) {
+                 boolean isDone, @Nullable LocalDate dueDate, List<ChecklistItem> checklistItemList,List<CommentlistItem> commentlistItemList,int priority) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -37,6 +37,7 @@ public class Task implements Parcelable {
         this.dueDate = dueDate;
         this.userId = userId;
         this.checklistItemList = checklistItemList;
+        this.commentlistItemList = commentlistItemList;
     }
 
     public long getId() {
@@ -69,8 +70,8 @@ public class Task implements Parcelable {
     public List<ChecklistItem> getChecklistItemList() {
         return checklistItemList;
     }
-    public List<CommentTodo> getCommentlistItemList() {
-        return checklistItemList;
+    public List<CommentlistItem> getCommentlistItemList() {
+        return commentlistItemList;
     }
 
     public static class Builder {
@@ -83,6 +84,7 @@ public class Task implements Parcelable {
         private boolean isDone;
         private LocalDate dueDate;
         private List<ChecklistItem> checklistItemList;
+        private List<CommentlistItem> commentlistItemList;
 
         public Builder setId(long id) {
             this.id = id;
@@ -120,9 +122,12 @@ public class Task implements Parcelable {
             this.checklistItemList = checklistItemList;
             return this;
         }
-
+        public Builder setCommentList(List<CommentlistItem> commentlistItemList) {
+            this.commentlistItemList = commentlistItemList;
+            return this;
+        }
         public Task build() {
-            return new Task(id, title, userId,description, isDone, dueDate, checklistItemList,priority);
+            return new Task(id, title, userId,description, isDone, dueDate, checklistItemList,commentlistItemList,priority);
         }
     }
 
@@ -141,6 +146,7 @@ public class Task implements Parcelable {
         dest.writeByte(this.isDone ? (byte) 1 : (byte) 0);
         dest.writeSerializable(this.dueDate);
         dest.writeList(this.checklistItemList);
+        dest.writeList(this.commentlistItemList);
     }
 
     protected Task(Parcel in) {
@@ -152,7 +158,9 @@ public class Task implements Parcelable {
         this.isDone = in.readByte() != 0;
         this.dueDate = (LocalDate) in.readSerializable();
         this.checklistItemList = new ArrayList<>();
+        this.commentlistItemList = new ArrayList<>();
         in.readList(this.checklistItemList, ChecklistItem.class.getClassLoader());
+        in.readList(this.commentlistItemList, CommentlistItem.class.getClassLoader());
     }
 
     public static final Parcelable.Creator<Task> CREATOR = new Parcelable.Creator<Task>() {

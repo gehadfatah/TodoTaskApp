@@ -17,6 +17,7 @@ import com.gehad.todotask.app.TodoApp;
 import com.gehad.todotask.common.ItemOffsetDecoration;
 import com.gehad.todotask.domain.model.Task;
 import com.gehad.todotask.ui.base.BaseMvpFragment;
+import com.gehad.todotask.ui.edittask.EditTaskActivity;
 import com.gehad.todotask.ui.edittask.newEdittask.EditTaskActivityNew;
 import com.gehad.todotask.ui.edittask.newedittaskdiolog.AddTaskDialog;
 import com.gehad.todotask.ui.tasks.adapter.FilterChangeListener;
@@ -108,9 +109,9 @@ public class TasksFragment extends BaseMvpFragment<TasksPresenter>
 
     @Override
     public void showAddTaskView() {
-       // EditTaskActivity.start(getContext());
-        AddTaskDialog addTaskDialog=new AddTaskDialog(getContext());
-        addTaskDialog.show();
+        EditTaskActivity.start(getContext());
+       // AddTaskDialog addTaskDialog=new AddTaskDialog(getContext());
+       // addTaskDialog.show();
 
     }
 

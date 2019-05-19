@@ -14,31 +14,31 @@ public class CommentlistItemMapper {
         throw new AssertionError();
     }
 
-    public static CommentlistItemDb toChecklistItemDb(long taskId, CommentlistItem commentlistItem) {
-        return new CommentlistItemDb(commentlistItem.getId(), taskId, commentlistItem.getdescription());
+    public static CommentlistItemDb toCommentlistItemDb(long taskId, CommentlistItem commentlistItem) {
+        return new CommentlistItemDb(commentlistItem.getId(), taskId, commentlistItem.getdescription(),commentlistItem.getDueDate());
     }
 
-    public static List<CommentlistItemDb> toChecklistItemDbList(long taskId, List<CommentlistItem> commentlistItems) {
+    public static List<CommentlistItemDb> toCommentlistItemDbList(long taskId, List<CommentlistItem> commentlistItems) {
         List<CommentlistItemDb> commentlistItemDbList = new ArrayList<>(commentlistItems.size());
 
         for (CommentlistItem commentlistItem : commentlistItems) {
-            commentlistItemDbList.add(toChecklistItemDb(taskId, commentlistItem));
+            commentlistItemDbList.add(toCommentlistItemDb(taskId, commentlistItem));
         }
 
         return commentlistItemDbList;
     }
 
-    public static CommentlistItem toChecklistItem(CommentlistItemDb commentlistItemDb) {
+    public static CommentlistItem toCommentlistItem(CommentlistItemDb commentlistItemDb) {
         return new CommentlistItem.Builder()
                 .setId(commentlistItemDb.getId())
                 .setDescription(commentlistItemDb.getDescription())
                 .build();
     }
 
-    public static List<CommentlistItem> toChecklistItemList(List<CommentlistItemDb> commentlistItemDbs) {
+    public static List<CommentlistItem> toCommentlistItemList(List<CommentlistItemDb> commentlistItemDbs) {
         List<CommentlistItem> commentlistItems = new ArrayList<>(commentlistItemDbs.size());
         for (CommentlistItemDb checklistItemDb : commentlistItemDbs) {
-            commentlistItems.add(toChecklistItem(checklistItemDb));
+            commentlistItems.add(toCommentlistItem(checklistItemDb));
         }
         return commentlistItems;
     }

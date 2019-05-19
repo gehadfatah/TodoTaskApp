@@ -2,16 +2,23 @@ package com.gehad.todotask.domain.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.Nullable;
+
+import org.threeten.bp.LocalDate;
 
 public class CommentlistItem implements Parcelable {
 
     private final long id;
 
     private final String description;
+    @Nullable
+    private final LocalDate dueDate;
 
-    private CommentlistItem(long id, String description) {
+    public CommentlistItem(@Nullable long id, String description, LocalDate dueDate) {
         this.id = id;
         this.description = description;
+        this.dueDate = dueDate;
+
     }
 
     public long getId() {
@@ -22,12 +29,18 @@ public class CommentlistItem implements Parcelable {
         return description;
     }
 
+    @Nullable
+    public LocalDate getDueDate() {
+        return dueDate;
+    }
+
     public static class Builder {
 
         private long id;
         private String description;
+        private LocalDate dueDate;
 
-        public Builder setId(long id) {
+        public Builder setId(@Nullable long id) {
             this.id = id;
             return this;
         }
@@ -37,8 +50,13 @@ public class CommentlistItem implements Parcelable {
             return this;
         }
 
+        public Builder setDueDate(LocalDate dueDate) {
+            this.dueDate = dueDate;
+            return this;
+        }
+
         public CommentlistItem build() {
-            return new CommentlistItem(id, description);
+            return new CommentlistItem(id, description, dueDate);
         }
     }
 
@@ -51,11 +69,15 @@ public class CommentlistItem implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(this.id);
         dest.writeString(this.description);
+        dest.writeSerializable(this.dueDate);
+
     }
 
     protected CommentlistItem(Parcel in) {
         this.id = in.readLong();
         this.description = in.readString();
+        this.dueDate = (LocalDate) in.readSerializable();
+
     }
 
     public static final Creator<CommentlistItem> CREATOR = new Creator<CommentlistItem>() {

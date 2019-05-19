@@ -105,30 +105,7 @@ public class TasksPresenter extends BasePresenter<TasksView> {
     }
 
     private Flowable<List<Task>> getTaskFlowable(String userId) {
-        return taskController.getAllTasks(userId);
-
-    }
-
-    private Flowable<List<Task>> getTaskFlowable2(String userId) {
-        return taskController.getDoneTasks().concatWith(
-                taskController.getToDoTasks());
-        /*return Single.merge(taskController.getDoneTasksSingle(),
-                taskController.getToDoTasksSingle());*/
-
-    }
-
-    private Single<List<Task>> getTaskFlowableTodo(String userId) {
-    /*    return taskController.getDoneTasks().zipWith(
-                taskController.getToDoTasks());
-*/
-        return
-                taskController.getToDoTasksSingle();
-
-    }
-
-    private Flowable<List<Task>> getTaskFlowableDone(String userId) {
-        return taskController.getDoneTasks();
-
+        return taskController.getAllTasksWithComments(userId);
 
     }
 

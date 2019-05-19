@@ -5,6 +5,9 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.Nullable;
+
+import org.threeten.bp.LocalDate;
 
 @Entity(
         tableName = "comment_list_item",
@@ -26,11 +29,15 @@ public class CommentlistItemDb {
 
     @ColumnInfo(name = "description")
     private final String description;
-
-    public CommentlistItemDb(long id, long taskId, String description) {
+    @Nullable
+    @ColumnInfo(name = "due_date")
+    private final LocalDate dueDate;
+    public CommentlistItemDb(long id, long taskId, String description,@Nullable LocalDate dueDate) {
         this.id = id;
         this.taskId = taskId;
         this.description = description;
+        this.dueDate = dueDate;
+
     }
 
     public long getId() {
@@ -43,5 +50,9 @@ public class CommentlistItemDb {
 
     public String getDescription() {
         return description;
+    }
+    @Nullable
+    public LocalDate getDueDate() {
+        return dueDate;
     }
 }
