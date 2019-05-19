@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">To Do List</string>
+    <string name="ending_tasks">Tasks near due date</string>
+    <string name="to_do_tasks">To do</string>
+    <string name="done_tasks">Done</string>
+    <string name="add_task_activity">Add task</string>
+    <string name="menu_accept">Accept</string>
+    <string name="task_title">Task title</string>
+    <string name="task_description">Description</string>
+    <string name="task_due_date">Due date</string>
+    <string name="date">Date</string>
+    <string name="priority">Priority</string>
+    <string name="date1">December 10 2018</string>
+    <string name="checklist">Checklist</string>
+    <string name="add_checklist_item_button_text">Add list item</string>
+    <string name="checklist_item_hint">What you need to do…</string>
+    <string name="menu_edit">Edit</string>
+    <string name="menu_delete">Delete</string>
+    <string name="no_tasks_message">No tasks here yet…</string>
+    <string name="message_task_marked_as_done">Task %s was marked as done </string>
+    <string name="message_task_unmarked_as_done">Task %s was unmarked as done</string>
+    <string name="message_task_deleted">Task %s deleted</string>
+    <string name="login">Login</string>
+    <string name="new_task">New Task</string>
+    <string name="create">CREATE</string>
+    <string name="username">USERNAME</string>
+    <string name="usernameTasks">Ahmed\'s Tasks</string>
+    <string name="task_title2">TASK TITLE</string>
+</resources>

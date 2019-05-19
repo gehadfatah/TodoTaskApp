@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="margin_xxlarge">32dp</dimen>
+    <dimen name="margin_xlarge">24dp</dimen>
+    <dimen name="margin_large">20dp</dimen>
+    <dimen name="margin_medium">16dp</dimen>
+    <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_xsmall">4dp</dimen>
+    <dimen name="margin_xxsmall">2dp</dimen>
+
+    <dimen name="form_image_width_height">32dp</dimen>
+    <dimen name="no_icon_form_margin">64dp</dimen>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="app_bar_height">0dp</dimen>
+    <dimen name="button_height_50">50dp</dimen>
+    <dimen name="button_height_40">40dp</dimen>
+    <dimen name="button_height_default">35dp</dimen>
+    <dimen name="button_height_45">45dp</dimen>
+    <dimen name="button_height_30">30dp</dimen>
+    <dimen name="button_height_60">60dp</dimen>
+    <dimen name="snashPadding">10dp</dimen>
+    <dimen name="snashPadding8">8dp</dimen>
+    <dimen name="snashPaddingtest">18dp</dimen>
+    <dimen name="weight_bottom_toolbar">.08</dimen>
+    <dimen name="weight_scroll_home">.82</dimen>
+    <dimen name="weight_top_toolbar">.1</dimen>
+    <dimen name="categoriesAllNameSize">11sp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="nav_header_vertical_spacing">16dp</dimen>
+    <dimen name="nav_header_height">150dp</dimen>
+    <dimen name="nav_header_height2">400dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="margin_toolbar">20dp</dimen>
+    <dimen name="margin_container">30dp</dimen>
+    <dimen name="margin_40">40dp</dimen>
+    <dimen name="margin_30">30dp</dimen>
+    <dimen name="margin_container_x">50dp</dimen>
+    <dimen name="margin_container_xx">75dp</dimen>
+
+
+    <!--padding-->
+    <dimen name="padding_">1dp</dimen>
+    <dimen name="padding_x">3dp</dimen>
+    <dimen name="padding_xx">5dp</dimen>
+    <dimen name="padding_xxx">10dp</dimen>
+    <dimen name="padding_8">8dp</dimen>
+    <dimen name="padding_15">15dp</dimen>
+    <dimen name="padding_xxxx">20dp</dimen>
+    <dimen name="padding_xxxxx">25dp</dimen>
+    <dimen name="padding_30">30dp</dimen>
+    <!--String Size-->
+    <dimen name="textSize_26sp">26sp</dimen>
+    <dimen name="textSize_21sp">21sp</dimen>
+    <dimen name="textSize_18sp">18sp</dimen>
+    <dimen name="textSize_16sp">16sp</dimen>
+    <dimen name="textSize_17sp">17sp</dimen>
+    <dimen name="textSize_14sp">14sp</dimen>
+    <dimen name="textSize_15sp">15sp</dimen>
+    <dimen name="textSize_25sp">25sp</dimen>
+    <dimen name="textSize_12sp">12sp</dimen>
+    <dimen name="textSize_home_banner_tv_invisible">2.5sp</dimen>
+    <dimen name="textSize_home_banner_tv_visible">6sp</dimen>
+    <dimen name="textSize_11sp">11sp</dimen>
+    <dimen name="textSize_13sp">13sp</dimen>
+    <dimen name="textSize_CategoriesSp">14sp</dimen>
+    <dimen name="textSize_4re_sp">18sp</dimen>
+    <dimen name="textSize_4sp">16sp</dimen>
+    <dimen name="textSize_9sp">9sp</dimen>
+    <dimen name="textSize_8sp">8sp</dimen>
+    <dimen name="textSize_transaction_item">10sp</dimen>
+    <dimen name="textSize_transaction_item_large">14sp</dimen>
+    <dimen name="textSize_10sp">10sp</dimen>
+    <dimen name="size_home_item">10sp</dimen>
+    <dimen name="des_size_home_item">9sp</dimen>
+    <dimen name="title_size_home_item_large">13sp</dimen>
+    <dimen name="desc_size_home_item_large">11sp</dimen>
+    <dimen name="textSize_7sp">7sp</dimen>
+    <dimen name="textSize_6sp">6sp</dimen>
+    <dimen name="snashButtonRecommend">9sp</dimen>
+    <dimen name="snashFloating">10sp</dimen>
+    <!--Image sizes-->
+    <dimen name="Image18">18dp</dimen>
+    <dimen name="Image24">24dp</dimen>
+    <dimen name="Image28">28dp</dimen>
+    <dimen name="Image36">36dp</dimen>
+    <dimen name="Image40">40dp</dimen>
+    <dimen name="userImage">48dp</dimen>
+    <dimen name="profileImage">56dp</dimen>
+    <dimen name="profileImageLarge">150dp</dimen>
+    <dimen name="logoImage">96dp</dimen>
+    <dimen name="d90">90dp</dimen>
+    <dimen name="d16">16dp</dimen>
+    <dimen name="floating_size">75dp</dimen>
+    <bool name="large_device">false</bool>
+
+    <!--image in MIsc width-->
+    <dimen name="MIscIMage">150dp</dimen>
+    <dimen name="cardWidth">155dp</dimen>
+    <dimen name="cardWidthAll">165dp</dimen>
+    <dimen name="cardCategoryWidthAll">170dp</dimen>
+    <dimen name="cardWidthAllLarge">220dp</dimen>
+    <dimen name="cardWidthMisc">170dp</dimen>
+    <dimen name="sizeTransImage">60dp</dimen>
+    <dimen name="sizeTransText">8sp</dimen>
+    <bool name="tab">false</bool>
+    <integer name="widthDivider">400</integer>
+    <integer name="widthDividerCollect">400</integer>
+    <dimen name="textSizeMenuSnashAll">14sp</dimen>
+    <dimen name="toolbarHeight">90dp</dimen>
+    <dimen name="marginLine100px">100px</dimen>
+    <dimen name="marginLine350px">350px</dimen>
+    <dimen name="marginLine150px">150px</dimen>
+    <dimen name="marginHelpHeight">120dp</dimen>
+    <dimen name="item_offset">10dp</dimen>
+
+    <bool name="isTablet">false</bool>
+
+    <integer name="duration_bar">800</integer>
+    <integer name="duration_search">800</integer>
+</resources>
