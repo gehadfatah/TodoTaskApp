@@ -14,7 +14,7 @@ public class CommentlistItem implements Parcelable {
     @Nullable
     private final LocalDate dueDate;
 
-    public CommentlistItem(@Nullable long id, String description, LocalDate dueDate) {
+    public CommentlistItem( long id, String description, @Nullable LocalDate dueDate) {
         this.id = id;
         this.description = description;
         this.dueDate = dueDate;
@@ -40,7 +40,7 @@ public class CommentlistItem implements Parcelable {
         private String description;
         private LocalDate dueDate;
 
-        public Builder setId(@Nullable long id) {
+        public Builder setId( long id) {
             this.id = id;
             return this;
         }

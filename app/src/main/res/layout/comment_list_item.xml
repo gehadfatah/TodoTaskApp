@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <TextView
@@ -9,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/black1"
-        android:text="kdjkfla"
+        tools:text="kdjkfla"
+        android:layout_marginTop="@dimen/padding_x"
         android:textSize="@dimen/textSize_16sp" />
 
     <TextView
@@ -19,5 +21,6 @@
         android:textColor="@color/gray_category"
         android:layout_marginTop="@dimen/padding_xx"
         android:textSize="@dimen/textSize_16sp"
-        android:text="jfj"/>
+
+        tools:text="jfj"/>
 </LinearLayout>

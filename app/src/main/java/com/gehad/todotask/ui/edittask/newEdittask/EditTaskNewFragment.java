@@ -60,6 +60,7 @@ public class EditTaskNewFragment extends BaseMvpFragment<EditTaskPresenterNew>
     ArrayList<CommentlistDataCollector> commentlistDataCollectors = new ArrayList<>();
     ArrayList<CommentlistDataCollector> newCommentlistDataCollectors = new ArrayList<>();
     CommentAdapter commentAdapter;
+    private LocalDate taskDate=null;
 
     public static EditTaskNewFragment newAddTaskInstance() {
         return new EditTaskNewFragment();
@@ -166,7 +167,12 @@ public class EditTaskNewFragment extends BaseMvpFragment<EditTaskPresenterNew>
 
     @Override
     public void setTaskDueDate(LocalDate localDate) {
-        dueDateTextView.setText(localDate.toString());
+       // dueDateTextView.setText(localDate.toString());
+        taskDate = localDate;
+        if (localDate != null) {
+            String formattedDate = LocalDateFormatterUtil.getShortMonthDayAndYearFormattedDate(localDate);
+            dueDateTextView.setText(formattedDate);
+        }
 
     }
 
@@ -206,7 +212,7 @@ public class EditTaskNewFragment extends BaseMvpFragment<EditTaskPresenterNew>
                 .setIsDone(doneCheckbox.isChecked())
                 .setPriority(spinner.getSelectedItemPosition())
                 .setCommentList(/*getlistComment()*/getCommentListItemsFromCollectors(newCommentlistDataCollectors))
-                .setDueDate(dueDateTextView.getText().toString().contains("Date") ? null : LocalDate.parse(dueDateTextView.getText().toString()))
+                .setDueDate(dueDateTextView.getText().toString().contains("Date") ? null : taskDate/*LocalDate.parse(dueDateTextView.getText().toString())*/)
                 .setUserId(LoginActivity.user_name)
                 .build());
     }
