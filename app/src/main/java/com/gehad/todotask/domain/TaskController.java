@@ -31,8 +31,8 @@ public class TaskController {
                                                List<ChecklistItem> checklistItemsToUpdate, List<ChecklistItem> checklistItemsToAdd) {
         return tasksRepository.updateTask(task, checklistItemsToDelete, checklistItemsToUpdate, checklistItemsToAdd);
     }
-    public Completable updateTaskWithCommentlist(Task task,   List<CommentlistItem> commentlistItemList) {
-        return tasksRepository.updateTaskWithComments(task, commentlistItemList);
+    public Completable updateTaskWithCommentlist(Task task    ) {
+        return tasksRepository.updateTaskWithComments(task);
     }
 
     public Completable updateTaskOnly(Task task) {
@@ -48,6 +48,9 @@ public class TaskController {
     }
     public Flowable<List<Task>> getAllTasks(String userId) {
         return tasksRepository.getAllTasks(userId);
+    }
+    public Flowable<List<Task>> getAllTasks( ) {
+        return tasksRepository.getAllTasks();
     }
     public Flowable<List<Task>> getAllTasksWithComments(String userId) {
         return tasksRepository.getAllTasksWithComments(userId);

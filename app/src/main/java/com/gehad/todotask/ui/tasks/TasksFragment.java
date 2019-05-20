@@ -109,9 +109,9 @@ public class TasksFragment extends BaseMvpFragment<TasksPresenter>
 
     @Override
     public void showAddTaskView() {
-        EditTaskActivity.start(getContext());
-       // AddTaskDialog addTaskDialog=new AddTaskDialog(getContext());
-       // addTaskDialog.show();
+        //EditTaskActivity.start(getContext());
+        AddTaskDialog addTaskDialog=new AddTaskDialog(getContext());
+        addTaskDialog.show();
 
     }
 

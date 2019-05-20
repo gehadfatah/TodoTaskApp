@@ -59,8 +59,8 @@ public class EditTaskPresenterNew extends BasePresenter<EditTaskViewNew> {
                         .subscribe(() -> getMvpView().showTaskDeletedMessage(task.getTitle()),
                                 throwable -> Timber.e(throwable, "Error while deleting task")));
     }
-    public void updateTaskwithcomments(Task task, List<CommentlistItem> commentlistItemList) {
-        disposables.add(taskController.updateTaskWithCommentlist(task, commentlistItemList)
+    public void updateTaskwithcomments(Task task ) {
+        disposables.add(taskController.updateTaskWithCommentlist(task)
                 .compose(RxTransformers.applyCompletableIoSchedulers())
                 .subscribe(
                         getMvpView()::finish,

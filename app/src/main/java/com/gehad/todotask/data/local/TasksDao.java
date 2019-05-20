@@ -31,6 +31,8 @@ public interface TasksDao {
 
     @Query("SELECT * FROM task WHERE userId=:userId")
     Flowable<List<TaskDb>> getAllTasks(String userId);
+    @Query("SELECT * FROM task ")
+    Flowable<List<TaskDb>> getAllTasks( );
     @Query("SELECT * FROM task WHERE is_done = 0 AND due_date < :localDate")
     Flowable<List<TaskDb>> getTaskWithDueDateBefore(LocalDate localDate);
 

@@ -128,6 +128,7 @@ public class TaskViewHolder extends BaseViewHolder<Task> implements Toolbar.OnMe
                             .setDueDate(currentTask.getDueDate())
                             .setIsDone(isDone)
                             .setChecklistItemList(currentTask.getChecklistItemList())
+                            .setCommentList(currentTask.getCommentlistItemList())
                             .build());
         }
     }

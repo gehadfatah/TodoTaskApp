@@ -77,7 +77,7 @@ public class TasksRepository {
                 }
         );
     }
-    public Completable updateTaskWithComments(Task task,  List<CommentlistItem> commentlistItemList) {
+    public Completable updateTaskWithComments(Task task) {
         return Completable.fromAction(() -> {
                     TaskDb taskDb = TaskMapper.toTaskDb(task);
                     appDatabase.beginTransaction();
@@ -90,7 +90,7 @@ public class TasksRepository {
 
 
                         List<CommentlistItemDb> toCommentItemDbsToAdd =
-                                CommentlistItemMapper.toCommentlistItemDbList(task.getId(), commentlistItemList);
+                                CommentlistItemMapper.toCommentlistItemDbList(task.getId(), task.getCommentlistItemList());
                         appDatabase.commentlistDao().insertAll(toCommentItemDbsToAdd);
 
                         appDatabase.setTransactionSuccessful();
@@ -100,6 +100,7 @@ public class TasksRepository {
                 }
         );
     }
+
     public Completable updateTaskOnly(Task task) {
         return Completable.fromAction(() -> {
             TaskDb taskDb = TaskMapper.toTaskDb(task);
@@ -119,17 +120,21 @@ public class TasksRepository {
      */
     public Flowable<List<Task>> getToDoTasks() {
         return appDatabase.tasksDao().getToDoTasks()
-                .flatMapSingle(this::getTasksWithChecklistFromTaskDbs);
+                .flatMapSingle(this::getTasksWithCommentlistFromTaskDbs);
     }
 
     public Flowable<List<Task>> getDoneTasks() {
         return appDatabase.tasksDao().getDoneTasks()
-                .flatMapSingle(this::getTasksWithChecklistFromTaskDbs);
+                .flatMapSingle(this::getTasksWithCommentlistFromTaskDbs);
     }
 
     public Flowable<List<Task>> getAllTasks(String  userid) {
         return appDatabase.tasksDao().getAllTasks(userid)
-                .flatMapSingle(this::getTasksWithChecklistFromTaskDbs);
+                .flatMapSingle(this::getTasksWithCommentlistFromTaskDbs);
+    }
+    public Flowable<List<Task>> getAllTasks(  ) {
+        return appDatabase.tasksDao().getAllTasks()
+                .flatMapSingle(this::getTasksWithCommentlistFromTaskDbs);
     }
     public Flowable<List<Task>> getAllTasksWithComments(String  userid) {
         return appDatabase.tasksDao().getAllTasks(userid)
@@ -137,7 +142,7 @@ public class TasksRepository {
     }
     public Flowable<List<Task>> getTasksWithDueDateBefore(LocalDate date) {
         return appDatabase.tasksDao().getTaskWithDueDateBefore(date)
-                .flatMapSingle(this::getTasksWithChecklistFromTaskDbs);
+                .flatMapSingle(this::getTasksWithCommentlistFromTaskDbs);
     }
 
     private Single<List<ChecklistItemDb>> getSingleCheckListItems(TaskDb taskDb) {

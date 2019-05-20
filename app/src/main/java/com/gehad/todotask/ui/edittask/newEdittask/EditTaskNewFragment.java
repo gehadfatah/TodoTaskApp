@@ -24,6 +24,7 @@ import com.gehad.todotask.domain.model.CommentlistItem;
 import com.gehad.todotask.domain.model.Task;
 import com.gehad.todotask.ui.base.BaseMvpFragment;
 import com.gehad.todotask.ui.edittask.DatePickerDialogFragment;
+import com.gehad.todotask.ui.edittask.adapter.model.ChecklistDataCollector;
 import com.gehad.todotask.ui.edittask.adapter.model.CommentlistDataCollector;
 import com.gehad.todotask.ui.login.LoginActivity;
 import com.gehad.todotask.ui.tasks.adapter.TasksAdapter;
@@ -56,7 +57,8 @@ public class EditTaskNewFragment extends BaseMvpFragment<EditTaskPresenterNew>
     Task taskToEdit;
     ArrayList<CommentlistItem> commentlistItems = new ArrayList<>();
     ArrayList<CommentlistItem> newCommentlistItems = new ArrayList<>();
-    ArrayList<CommentlistDataCollector> oldCommentlistDataCollector = new ArrayList<>();
+    ArrayList<CommentlistDataCollector> commentlistDataCollectors = new ArrayList<>();
+    ArrayList<CommentlistDataCollector> newCommentlistDataCollectors = new ArrayList<>();
     CommentAdapter commentAdapter;
 
     public static EditTaskNewFragment newAddTaskInstance() {
@@ -96,11 +98,11 @@ public class EditTaskNewFragment extends BaseMvpFragment<EditTaskPresenterNew>
     public void setcomment_list_recycler() {
 
         comment_list_recycler.setHasFixedSize(true);
-        commentlistItems = (ArrayList<CommentlistItem>) taskToEdit.getCommentlistItemList();
         for (CommentlistItem commentlistItem :
-                commentlistItems) {
+                taskToEdit.getCommentlistItemList()) {
             CommentlistDataCollector commentlistDataCollector = new CommentlistDataCollector(commentlistItem.getId(), commentlistItem.getdescription(), commentlistItem.getDueDate());
-            oldCommentlistDataCollector.add(commentlistDataCollector);
+            commentlistDataCollectors.add(commentlistDataCollector);
+            commentlistItems.add(commentlistItem);
         }
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
 
@@ -130,6 +132,8 @@ public class EditTaskNewFragment extends BaseMvpFragment<EditTaskPresenterNew>
                 .setDescription(commentlistDataCollector.getDescription())
                 .setDueDate(commentlistDataCollector.getDueDate())
                 .build());
+        newCommentlistDataCollectors.add(commentlistDataCollector);
+        commentlistDataCollectors.add(commentlistDataCollector);
         commentlistItems.add(new CommentlistItem.Builder()
                 .setDescription(commentlistDataCollector.getDescription())
                 .setDueDate(commentlistDataCollector.getDueDate())
@@ -137,7 +141,9 @@ public class EditTaskNewFragment extends BaseMvpFragment<EditTaskPresenterNew>
         if (getActivity() != null)
             KeyboardUtils.hideSoftInput(getActivity());
         edit_text_message.setText("");
-        commentAdapter.notifyDataSetChanged();
+        commentAdapter.notifyItemInserted(commentAdapter.getItemCount() - 1);
+
+        comment_list_recycler.smoothScrollToPosition(commentAdapter.getItemCount() - 1);
 
 
     }
@@ -193,21 +199,34 @@ public class EditTaskNewFragment extends BaseMvpFragment<EditTaskPresenterNew>
                 .setDueDate(dueDateTextView.getText().toString().contains("Date") ? null : LocalDate.parse(dueDateTextView.getText().toString()))
                 .setUserId(LoginActivity.user_name)
                 .build());*/
-
+//here i send just newcomment to save it in comment table
         getPresenter().updateTaskwithcomments(new Task.Builder()
                 .setId(taskToEdit.getId())
                 .setTitle(taskToEdit.getTitle())
                 .setIsDone(doneCheckbox.isChecked())
                 .setPriority(spinner.getSelectedItemPosition())
-                .setCommentList(/*getlistComment()*/newCommentlistItems)
+                .setCommentList(/*getlistComment()*/getCommentListItemsFromCollectors(newCommentlistDataCollectors))
                 .setDueDate(dueDateTextView.getText().toString().contains("Date") ? null : LocalDate.parse(dueDateTextView.getText().toString()))
                 .setUserId(LoginActivity.user_name)
-                .build(), getlistComment());
+                .build());
     }
 
     private List<CommentlistItem> getlistComment() {
         ArrayList<CommentlistItem> commentlistItems = (ArrayList<CommentlistItem>) taskToEdit.getCommentlistItemList();
 
+        return commentlistItems;
+    }
+
+    public List<CommentlistItem> getCommentListItemsFromCollectors(List<CommentlistDataCollector> commentlistDataCollectors) {
+        List<CommentlistItem> commentlistItems = new ArrayList<>(commentlistDataCollectors.size());
+        for (CommentlistDataCollector commentlistDataCollector : commentlistDataCollectors) {
+            commentlistItems.add(
+                    new CommentlistItem.Builder()
+                            .setId(commentlistDataCollector.getId())
+                            .setDescription(commentlistDataCollector.getDescription())
+                            .setDueDate(commentlistDataCollector.getDueDate())
+                            .build());
+        }
         return commentlistItems;
     }
 }
