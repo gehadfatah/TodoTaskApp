@@ -111,8 +111,16 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/comment_list_recycler"
             android:layout_width="match_parent"
+            android:adjustViewBounds="true"
+            android:clipToPadding="false"
+
             android:layout_height="match_parent"
             android:padding="20dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+         />
 
     </LinearLayout>
 
