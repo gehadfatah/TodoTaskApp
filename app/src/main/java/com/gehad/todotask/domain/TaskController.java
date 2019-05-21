@@ -7,12 +7,9 @@ import java.util.List;
 import javax.inject.Inject;
 
 import com.gehad.todotask.data.local.TasksRepository;
-import com.gehad.todotask.domain.model.ChecklistItem;
-import com.gehad.todotask.domain.model.CommentlistItem;
 import com.gehad.todotask.domain.model.Task;
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
-import io.reactivex.Single;
 
 public class TaskController {
 
@@ -27,10 +24,7 @@ public class TaskController {
         return tasksRepository.saveNewTask(task);
     }
 
-    public Completable updateTaskWithChecklist(Task task, List<ChecklistItem> checklistItemsToDelete,
-                                               List<ChecklistItem> checklistItemsToUpdate, List<ChecklistItem> checklistItemsToAdd) {
-        return tasksRepository.updateTask(task, checklistItemsToDelete, checklistItemsToUpdate, checklistItemsToAdd);
-    }
+
     public Completable updateTaskWithCommentlist(Task task    ) {
         return tasksRepository.updateTaskWithComments(task);
     }

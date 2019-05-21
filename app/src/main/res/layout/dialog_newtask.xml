@@ -31,6 +31,8 @@
             android:layout_height="wrap_content"
             android:background="@null"
             android:padding="10dp"
+            android:inputType="text"
+            android:imeOptions="actionDone"
             android:id="@+id/taskTitleEd"
             android:hint="@string/task_title2"
             android:textColor="@color/gray_light" />

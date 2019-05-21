@@ -13,7 +13,7 @@
  * limitations under the License
  */
 
-package com.gehad.todotask.common;
+package com.gehad.todotask.common.util;
 
 import android.app.Activity;
 import android.content.Context;

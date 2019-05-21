@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -10,9 +11,9 @@
         android:orientation="vertical">
 
         <RelativeLayout
+            android:id="@+id/doneRel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/doneRel"
             android:padding="@dimen/padding_xxxx">
 
 
@@ -30,10 +31,10 @@
         </RelativeLayout>
 
         <LinearLayout
+            android:id="@+id/lindoneRel"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_below="@+id/doneRel"
-            android:id="@+id/lindoneRel"
 
             android:background="@color/gray_light"
             android:orientation="horizontal">
@@ -41,9 +42,9 @@
         </LinearLayout>
 
         <RelativeLayout
+            android:id="@+id/dateRel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/dateRel"
             android:layout_below="@+id/lindoneRel"
 
             android:padding="@dimen/padding_xxxx">
@@ -68,9 +69,9 @@
         </RelativeLayout>
 
         <LinearLayout
+            android:id="@+id/linDate"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:id="@+id/linDate"
             android:layout_below="@+id/dateRel"
             android:background="@color/gray_light"
             android:orientation="horizontal">
@@ -78,9 +79,9 @@
         </LinearLayout>
 
         <RelativeLayout
+            android:id="@+id/Relprio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/Relprio"
             android:layout_below="@+id/linDate"
             android:padding="@dimen/padding_xxxx">
 
@@ -89,9 +90,9 @@
                 android:id="@+id/prTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/priority"
                 android:layout_centerVertical="true"
                 android:gravity="center"
+                android:text="@string/priority"
                 android:textSize="@dimen/textSize_21sp" />
 
 
@@ -101,30 +102,32 @@
                 android:layout_height="wrap_content"
                 android:layout_alignEnd="@+id/prTv"
                 android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
                 android:focusable="false"
                 android:gravity="center"
-                android:layout_centerVertical="true"
+
                 android:spinnerMode="dropdown"
+                android:textSize="@dimen/textSize_10sp"
                 android:visibility="visible" />
-           <!-- <Spinner
-                android:id="@+id/spinner"
-                android:layout_width="110dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:focusable="false"
-                android:gravity="center"
-                android:layout_centerVertical="true"
-                android:spinnerMode="dropdown"
-                android:fontFamily="sans-serif"
-                android:textColor="@color/gradient_center"
-                android:textSize="16sp"
-                tools:ignore="RelativeOverlap" />-->
+            <!-- <Spinner
+                 android:id="@+id/spinner"
+                 android:layout_width="110dp"
+                 android:layout_height="wrap_content"
+                 android:layout_alignParentEnd="true"
+                 android:focusable="false"
+                 android:gravity="center"
+                 android:layout_centerVertical="true"
+                 android:spinnerMode="dropdown"
+                 android:fontFamily="sans-serif"
+                 android:textColor="@color/gradient_center"
+                 android:textSize="16sp"
+                 tools:ignore="RelativeOverlap" />-->
         </RelativeLayout>
 
         <LinearLayout
+            android:id="@+id/linPri"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:id="@+id/linPri"
             android:layout_below="@+id/Relprio"
             android:background="@color/gray_light"
             android:orientation="horizontal">
@@ -132,66 +135,66 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/commenTv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/linPri"
             android:layout_marginTop="15dp"
+            android:layout_marginBottom="@dimen/padding_xxx"
             android:paddingStart="20dp"
             android:text="Comments"
-            android:id="@+id/commenTv"
-            android:layout_marginBottom="@dimen/padding_xxx"
-            android:layout_below="@+id/linPri"
             android:textSize="@dimen/textSize_21sp" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/comment_list_recycler"
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/send_layout"
+            android:layout_below="@+id/commenTv"
             android:adjustViewBounds="true"
             android:clipToPadding="false"
-            android:layout_below="@+id/commenTv"
-            android:layout_above="@+id/send_layout"
-
-            android:layout_height="match_parent"
-            android:padding="20dp" />
+            android:padding="20dp"
+             />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="50dp"
 
-            android:layout_below="@+id/comment_list_recycler"
-         />
+            android:layout_below="@+id/comment_list_recycler" />
+
         <RelativeLayout
             android:id="@+id/send_layout"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_alignParentBottom="true"
-            android:gravity="center"
             android:background="@color/gray_light"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <EditText
                 android:id="@+id/edit_text_message"
                 android:layout_width="match_parent"
-                android:layout_marginEnd="15dp"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="15dp"
-                android:layout_centerVertical="true"
-                android:paddingStart="@dimen/padding_xxx"
-                android:paddingLeft="@dimen/padding_xxx"
+                android:layout_marginEnd="15dp"
                 android:background="@drawable/raduis_all"
                 android:hint="@string/type_a_message"
                 android:imeOptions="actionSend"
                 android:inputType="text"
                 android:maxLines="1"
-                android:padding="5dp" />
+                android:padding="5dp"
+                android:paddingStart="@dimen/padding_xxx"
+                android:paddingLeft="@dimen/padding_xxx" />
 
             <ImageButton
                 android:id="@+id/send_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_alignEnd="@+id/edit_text_message"
                 android:layout_gravity="center_vertical"
                 android:layout_margin="5dp"
-                android:layout_alignEnd="@+id/edit_text_message"
                 android:background="@android:color/transparent"
                 android:src="@drawable/ic_send_black_24dp" />
         </RelativeLayout>

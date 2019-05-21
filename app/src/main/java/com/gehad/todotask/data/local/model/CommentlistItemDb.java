@@ -9,6 +9,8 @@ import android.support.annotation.Nullable;
 
 import org.threeten.bp.LocalDate;
 
+import java.util.Date;
+
 @Entity(
         tableName = "comment_list_item",
         indices = @Index("task_id"),
@@ -31,8 +33,8 @@ public class CommentlistItemDb {
     private final String description;
     @Nullable
     @ColumnInfo(name = "due_date")
-    private final LocalDate dueDate;
-    public CommentlistItemDb(long id, long taskId, String description,@Nullable LocalDate dueDate) {
+    private final Date dueDate;
+    public CommentlistItemDb(long id, long taskId, String description,@Nullable Date dueDate) {
         this.id = id;
         this.taskId = taskId;
         this.description = description;
@@ -52,7 +54,7 @@ public class CommentlistItemDb {
         return description;
     }
     @Nullable
-    public LocalDate getDueDate() {
+    public Date getDueDate() {
         return dueDate;
     }
 }

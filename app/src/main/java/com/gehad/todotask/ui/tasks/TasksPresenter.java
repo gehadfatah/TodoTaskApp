@@ -7,14 +7,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import com.gehad.todotask.common.RxTransformers;
+import com.gehad.todotask.common.util.RxTransformers;
 import com.gehad.todotask.domain.TaskController;
 import com.gehad.todotask.domain.model.Task;
 import com.gehad.todotask.ui.base.BasePresenter;
 
 import io.reactivex.Flowable;
-import io.reactivex.Observable;
-import io.reactivex.Single;
 import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 

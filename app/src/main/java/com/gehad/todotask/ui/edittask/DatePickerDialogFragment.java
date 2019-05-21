@@ -10,7 +10,7 @@ import android.support.v4.app.Fragment;
 
 import org.threeten.bp.ZonedDateTime;
 
-import com.gehad.todotask.common.InterfaceNotImplementedException;
+import com.gehad.todotask.common.util.InterfaceNotImplementedException;
 
 public class DatePickerDialogFragment extends DialogFragment {
 

@@ -6,15 +6,17 @@ import android.support.annotation.Nullable;
 
 import org.threeten.bp.LocalDate;
 
+import java.util.Date;
+
 public class CommentlistItem implements Parcelable {
 
     private final long id;
 
     private final String description;
     @Nullable
-    private final LocalDate dueDate;
+    private final Date dueDate;
 
-    public CommentlistItem( long id, String description, @Nullable LocalDate dueDate) {
+    public CommentlistItem( long id, String description, @Nullable Date dueDate) {
         this.id = id;
         this.description = description;
         this.dueDate = dueDate;
@@ -30,7 +32,7 @@ public class CommentlistItem implements Parcelable {
     }
 
     @Nullable
-    public LocalDate getDueDate() {
+    public Date getDueDate() {
         return dueDate;
     }
 
@@ -38,7 +40,7 @@ public class CommentlistItem implements Parcelable {
 
         private long id;
         private String description;
-        private LocalDate dueDate;
+        private Date dueDate;
 
         public Builder setId( long id) {
             this.id = id;
@@ -50,7 +52,7 @@ public class CommentlistItem implements Parcelable {
             return this;
         }
 
-        public Builder setDueDate(LocalDate dueDate) {
+        public Builder setDueDate(Date dueDate) {
             this.dueDate = dueDate;
             return this;
         }
@@ -76,7 +78,7 @@ public class CommentlistItem implements Parcelable {
     protected CommentlistItem(Parcel in) {
         this.id = in.readLong();
         this.description = in.readString();
-        this.dueDate = (LocalDate) in.readSerializable();
+        this.dueDate = (Date) in.readSerializable();
 
     }
 

@@ -1,28 +1,14 @@
 package com.gehad.todotask.ui.edittask.newEdittask;
 
-import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.view.Menu;
-import android.widget.CheckBox;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.gehad.todotask.R;
 import com.gehad.todotask.domain.model.Task;
-import com.gehad.todotask.ui.TasksMain.TaskActivity;
 import com.gehad.todotask.ui.base.BaseActivity;
-import com.gehad.todotask.ui.base.BaseMvpActivity;
-import com.gehad.todotask.ui.edittask.EditTaskFragment;
-import com.gehad.todotask.ui.edittask.adapter.DueDateRequestListener;
-import com.gehad.todotask.ui.login.LoginActivity;
-
-import org.threeten.bp.LocalDate;
 
 import butterknife.BindView;
 import butterknife.OnClick;

@@ -1,8 +1,6 @@
 package com.gehad.todotask.domain.mapper;
 
-import com.gehad.todotask.data.local.model.ChecklistItemDb;
 import com.gehad.todotask.data.local.model.CommentlistItemDb;
-import com.gehad.todotask.domain.model.ChecklistItem;
 import com.gehad.todotask.domain.model.CommentlistItem;
 
 import java.util.ArrayList;

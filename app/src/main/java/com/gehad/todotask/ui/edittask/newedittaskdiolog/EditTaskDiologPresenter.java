@@ -1,17 +1,9 @@
 package com.gehad.todotask.ui.edittask.newedittaskdiolog;
 
-import android.support.annotation.Nullable;
-
-import com.gehad.todotask.common.RxTransformers;
+import com.gehad.todotask.common.util.RxTransformers;
 import com.gehad.todotask.domain.TaskController;
-import com.gehad.todotask.domain.model.ChecklistItem;
 import com.gehad.todotask.domain.model.Task;
 import com.gehad.todotask.ui.base.BasePresenter;
-import com.gehad.todotask.ui.edittask.newedittaskdiolog.EditTaskDialogView;
-
-import org.threeten.bp.LocalDate;
-
-import java.util.List;
 
 import javax.inject.Inject;
 

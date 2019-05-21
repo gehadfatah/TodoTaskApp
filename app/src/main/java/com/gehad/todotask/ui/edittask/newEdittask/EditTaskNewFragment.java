@@ -16,25 +16,23 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.gehad.todotask.R;
 import com.gehad.todotask.app.TodoApp;
-import com.gehad.todotask.common.KeyboardUtils;
-import com.gehad.todotask.common.LocalDateFormatterUtil;
-import com.gehad.todotask.domain.model.ChecklistItem;
+import com.gehad.todotask.common.util.KeyboardUtils;
+import com.gehad.todotask.common.util.LocalDateFormatterUtil;
 import com.gehad.todotask.domain.model.CommentlistItem;
 import com.gehad.todotask.domain.model.Task;
 import com.gehad.todotask.ui.base.BaseMvpFragment;
 import com.gehad.todotask.ui.edittask.DatePickerDialogFragment;
-import com.gehad.todotask.ui.edittask.adapter.model.ChecklistDataCollector;
 import com.gehad.todotask.ui.edittask.adapter.model.CommentlistDataCollector;
 import com.gehad.todotask.ui.login.LoginActivity;
-import com.gehad.todotask.ui.tasks.adapter.TasksAdapter;
 
 import org.threeten.bp.LocalDate;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -98,6 +96,7 @@ public class EditTaskNewFragment extends BaseMvpFragment<EditTaskPresenterNew>
     protected EditTaskPresenterNew createPresenter() {
         return TodoApp.getAppComponent(getContext()).addTaskNewFragmentComponent().getPresenter();
     }
+
     private TextView.OnEditorActionListener editorListener = new TextView.OnEditorActionListener() {
         @Override
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -111,6 +110,7 @@ public class EditTaskNewFragment extends BaseMvpFragment<EditTaskPresenterNew>
             return false;
         }
     };
+
     public void setcomment_list_recycler() {
         comment_list_recycler.setHasFixedSize(true);
         for (CommentlistItem commentlistItem :
@@ -120,8 +120,10 @@ public class EditTaskNewFragment extends BaseMvpFragment<EditTaskPresenterNew>
             commentlistItems.add(commentlistItem);
         }
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        linearLayoutManager.setStackFromEnd(true);
 
         comment_list_recycler.setLayoutManager(linearLayoutManager);
+        Collections.reverse(commentlistItems);
 
         commentAdapter = new CommentAdapter(getActivity(), commentlistItems);
         comment_list_recycler.setAdapter(commentAdapter);
@@ -142,7 +144,7 @@ public class EditTaskNewFragment extends BaseMvpFragment<EditTaskPresenterNew>
         //  commentlistItems.add(new CommentlistItem(null,edit_text_message.getText().toString(),LocalDate.now()));
         CommentlistDataCollector commentlistDataCollector = new CommentlistDataCollector();
         commentlistDataCollector.setDescription(edit_text_message.getText().toString());
-        commentlistDataCollector.setDueDate(LocalDate.now());
+        commentlistDataCollector.setDueDate(new Date());
         newCommentlistItems.add(new CommentlistItem.Builder()
                 .setDescription(commentlistDataCollector.getDescription())
                 .setDueDate(commentlistDataCollector.getDueDate())
@@ -156,9 +158,10 @@ public class EditTaskNewFragment extends BaseMvpFragment<EditTaskPresenterNew>
         if (getActivity() != null)
             KeyboardUtils.hideSoftInput(getActivity());
         edit_text_message.setText("");
-        commentAdapter.notifyItemInserted(commentAdapter.getItemCount() - 1);
-
-        comment_list_recycler.scrollToPosition(commentAdapter.getItemCount() - 1);
+        commentAdapter.notifyItemInserted(commentlistItems.size() - 1);
+       // Collections.reverse(commentlistItems);
+        comment_list_recycler.scrollToPosition(0);
+        commentAdapter.notifyDataSetChanged();
 
 
     }

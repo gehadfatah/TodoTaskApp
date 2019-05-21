@@ -7,14 +7,10 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import com.gehad.todotask.data.local.model.ChecklistItemDb;
 import com.gehad.todotask.data.local.model.CommentlistItemDb;
 import com.gehad.todotask.data.local.model.TaskDb;
-import com.gehad.todotask.domain.mapper.ChecklistItemMapper;
 import com.gehad.todotask.domain.mapper.CommentlistItemMapper;
 import com.gehad.todotask.domain.mapper.TaskMapper;
-import com.gehad.todotask.domain.model.ChecklistItem;
-import com.gehad.todotask.domain.model.CommentlistItem;
 import com.gehad.todotask.domain.model.Task;
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
@@ -40,8 +36,6 @@ public class TasksRepository {
                     appDatabase.beginTransaction();
                     try {
                         long taskId = appDatabase.tasksDao().insertTask(taskDb);
-                        //List<ChecklistItemDb> checklistItemDbs = ChecklistItemMapper.toChecklistItemDbList(taskId, task.getChecklistItemList());
-                       // appDatabase.checklistDao().insertAll(checklistItemDbs);
                         appDatabase.setTransactionSuccessful();
                     } finally {
                         appDatabase.endTransaction();
@@ -50,44 +44,12 @@ public class TasksRepository {
         );
     }
 
-    public Completable updateTask(Task task, List<ChecklistItem> checklistItemsToDelete,
-                                  List<ChecklistItem> checklistItemsToUpdate, List<ChecklistItem> checklistItemsToAdd) {
-        return Completable.fromAction(() -> {
-                    TaskDb taskDb = TaskMapper.toTaskDb(task);
-                    appDatabase.beginTransaction();
-                    try {
-                        appDatabase.tasksDao().updateTask(taskDb);
-
-                        List<ChecklistItemDb> checklistItemDbsToDelete =
-                                ChecklistItemMapper.toChecklistItemDbList(task.getId(), checklistItemsToDelete);
-                        appDatabase.checklistDao().deleteAll(checklistItemDbsToDelete);
-
-                        List<ChecklistItemDb> checklistItemDbsToUpdate =
-                                ChecklistItemMapper.toChecklistItemDbList(task.getId(), checklistItemsToUpdate);
-                        appDatabase.checklistDao().updateAll(checklistItemDbsToUpdate);
-
-                        List<ChecklistItemDb> checklistItemDbsToAdd =
-                                ChecklistItemMapper.toChecklistItemDbList(task.getId(), checklistItemsToAdd);
-                        appDatabase.checklistDao().insertAll(checklistItemDbsToAdd);
-
-                        appDatabase.setTransactionSuccessful();
-                    } finally {
-                        appDatabase.endTransaction();
-                    }
-                }
-        );
-    }
     public Completable updateTaskWithComments(Task task) {
         return Completable.fromAction(() -> {
                     TaskDb taskDb = TaskMapper.toTaskDb(task);
                     appDatabase.beginTransaction();
                     try {
                         appDatabase.tasksDao().updateTask(taskDb);
-
-                      /*  List<ChecklistItemDb> checklistItemDbsToDelete =
-                                ChecklistItemMapper.toChecklistItemDbList(task.getId(), checklistItemsToDelete);
-                        appDatabase.checklistDao().deleteAll(checklistItemDbsToDelete);*/
-
 
                         List<CommentlistItemDb> toCommentItemDbsToAdd =
                                 CommentlistItemMapper.toCommentlistItemDbList(task.getId(), task.getCommentlistItemList());
@@ -145,29 +107,11 @@ public class TasksRepository {
                 .flatMapSingle(this::getTasksWithCommentlistFromTaskDbs);
     }
 
-    private Single<List<ChecklistItemDb>> getSingleCheckListItems(TaskDb taskDb) {
-        return appDatabase.checklistDao().getChecklistItems(taskDb.getId()).firstOrError();
-    }
+
     private Single<List<CommentlistItemDb>> getSingleCommentListItems(TaskDb taskDb) {
         return appDatabase.commentlistDao().getCommentlistItems(taskDb.getId()).firstOrError();
     }
 
-    private Single<List<Task>> getTasksWithChecklistFromTaskDbs(List<TaskDb> taskDbs) {
-        return Flowable.fromIterable(taskDbs)
-                .flatMapSingle(new Function<TaskDb, SingleSource<? extends Task>>() {
-                    @Override
-                    public SingleSource<? extends Task> apply(TaskDb taskDb) throws Exception {
-                        return TasksRepository.this.getSingleCheckListItems(taskDb)
-                                .map(new Function<List<ChecklistItemDb>, Task>() {
-                                    @Override
-                                    public Task apply(List<ChecklistItemDb> checklistItemDbs) throws Exception {
-                                        return TaskMapper.fromTaskDbAndChecklistDbList(taskDb, checklistItemDbs);
-                                    }
-                                });
-                    }
-                }, false, 1)
-                .toList();
-    }
     private Single<List<Task>> getTasksWithCommentlistFromTaskDbs(List<TaskDb> taskDbs) {
         return Flowable.fromIterable(taskDbs)
                 .flatMapSingle(new Function<TaskDb, SingleSource<? extends Task>>() {

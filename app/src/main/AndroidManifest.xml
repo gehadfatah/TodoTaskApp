@@ -13,12 +13,7 @@
         <activity android:name=".ui.TasksMain.TaskActivity">
 
         </activity>
-        <activity android:name=".ui.MainTask.TasksActivity">
 
-        </activity>
-        <activity
-            android:name=".ui.edittask.EditTaskActivity"
-            android:label="@string/add_task_activity" />
         <activity android:name=".ui.login.LoginActivity"
             >
         <intent-filter>

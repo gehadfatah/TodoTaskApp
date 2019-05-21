@@ -1,4 +1,4 @@
-package com.gehad.todotask.common;
+package com.gehad.todotask.common.util;
 
 import android.content.Context;
 import android.graphics.Rect;

@@ -6,7 +6,6 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
-import com.gehad.todotask.data.local.model.ChecklistItemDb;
 import com.gehad.todotask.data.local.model.CommentlistItemDb;
 
 import java.util.List;

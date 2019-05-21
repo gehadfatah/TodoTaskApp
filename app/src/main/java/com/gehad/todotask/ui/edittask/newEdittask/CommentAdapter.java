@@ -9,7 +9,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.gehad.todotask.R;
-import com.gehad.todotask.common.LocalDateFormatterUtil;
+import com.gehad.todotask.common.util.DateUtils;
+import com.gehad.todotask.common.util.LocalDateFormatterUtil;
 import com.gehad.todotask.domain.model.CommentlistItem;
 
 import java.util.ArrayList;
@@ -31,7 +32,10 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
     }
 
-
+    public void addItem(CommentlistItem commentlistItem) {
+        commentTodosList.add(commentlistItem);
+        notifyItemInserted(commentTodosList.size());
+    }
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -48,7 +52,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         //holder.timeTv.setText(commentTodo.getDueDate().toString());
 
         if (commentTodo.getDueDate() != null) {
-            holder.timeTv.setText(LocalDateFormatterUtil.getShortMonthDayAndYearFormattedDate(commentTodo.getDueDate()));
+            //holder.timeTv.setText(LocalDateFormatterUtil.getShortMonthDayAndYearFormattedDate(commentTodo.getDueDate()));
+            holder.timeTv.setText(DateUtils.dateTimeToshow(commentTodo.getDueDate()));
         }
 
     }

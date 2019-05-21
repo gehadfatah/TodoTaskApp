@@ -1,4 +1,4 @@
-package com.gehad.todotask.common;
+package com.gehad.todotask.common.util;
 
 public class InterfaceNotImplementedException extends RuntimeException {
 

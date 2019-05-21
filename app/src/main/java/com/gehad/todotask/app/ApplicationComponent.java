@@ -3,7 +3,6 @@ package com.gehad.todotask.app;
 import javax.inject.Singleton;
 
 import com.gehad.todotask.data.local.LocalDataModule;
-import com.gehad.todotask.ui.edittask.EditTaskFragmentComponent;
 import com.gehad.todotask.ui.edittask.newEdittask.EditTaskNewFragmentComponent;
 import com.gehad.todotask.ui.edittask.newedittaskdiolog.EditTaskDialogComponent;
 import com.gehad.todotask.ui.tasks.TasksFragmentComponent;
@@ -18,7 +17,6 @@ public interface ApplicationComponent {
 
     TasksFragmentComponent tasksFragmentComponent();
 
-    EditTaskFragmentComponent addTaskFragmentComponent();
     EditTaskNewFragmentComponent addTaskNewFragmentComponent();
     EditTaskDialogComponent addTaskDiaologComponent();
 }
