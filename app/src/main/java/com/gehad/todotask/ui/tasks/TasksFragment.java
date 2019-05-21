@@ -18,7 +18,7 @@ import com.gehad.todotask.common.util.ItemOffsetDecoration;
 import com.gehad.todotask.domain.model.Task;
 import com.gehad.todotask.ui.base.BaseMvpFragment;
 import com.gehad.todotask.ui.edittask.newEdittask.EditTaskActivityNew;
-import com.gehad.todotask.ui.edittask.newedittaskdiolog.AddTaskDialog;
+import com.gehad.todotask.ui.newedittaskdiolog.AddTaskDialog;
 import com.gehad.todotask.ui.tasks.adapter.FilterChangeListener;
 import com.gehad.todotask.ui.tasks.adapter.TaskDeleteListener;
 import com.gehad.todotask.ui.tasks.adapter.TaskDoneListener;

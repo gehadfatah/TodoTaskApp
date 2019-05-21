@@ -1,6 +1,6 @@
 ext {
     // Versions
-    supportLibraryVersion = '26.0.0'
+    supportLibraryVersion = '26.1.0'
     daggerVersion = '2.10'
     butterKnifeVersion = '8.6.0'
     stethoVersion = '1.5.0'
@@ -24,7 +24,8 @@ ext {
             room          : "android.arch.persistence.room:runtime:$roomVersion",
             roomRxJava2   : "android.arch.persistence.room:rxjava2:$roomVersion",
             swipe_delete   : 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.1',
-
+            fire_core   : 'com.google.firebase:firebase-core:16.0.9',
+            firestore   : 'com.google.firebase:firebase-firestore:19.0.0',
             leakCanary    : "com.squareup.leakcanary:leakcanary-android:$leakCanary",
             leakCanaryNoOp: "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanary",
     ]

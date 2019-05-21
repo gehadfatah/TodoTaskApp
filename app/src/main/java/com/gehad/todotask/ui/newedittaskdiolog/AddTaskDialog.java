@@ -1,4 +1,4 @@
-package com.gehad.todotask.ui.edittask.newedittaskdiolog;
+package com.gehad.todotask.ui.newedittaskdiolog;
 
 import android.content.Context;
 import android.os.Bundle;

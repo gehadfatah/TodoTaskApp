@@ -10,6 +10,7 @@ android {
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -60,5 +61,8 @@ dependencies {
     compile libs.timber
     implementation libs.constr
     implementation libs.swipe_delete
+    implementation libs.fire_core
+    implementation libs.firestore
 
 }
+apply plugin: 'com.google.gms.google-services'
