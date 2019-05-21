@@ -24,14 +24,15 @@ import com.gehad.todotask.ui.tasks.adapter.FilterChangeListener;
 import com.gehad.todotask.ui.tasks.adapter.TaskDeleteListener;
 import com.gehad.todotask.ui.tasks.adapter.TaskDoneListener;
 import com.gehad.todotask.ui.tasks.adapter.TaskEditListener;
+import com.gehad.todotask.ui.tasks.adapter.TaskSpinnerListener;
 import com.gehad.todotask.ui.tasks.adapter.TasksAdapter;
 
 public class TasksFragment extends BaseMvpFragment<TasksPresenter>
-        implements TasksView, TaskEditListener, TaskDeleteListener, TaskDoneListener, FilterChangeListener {
+        implements TasksView, TaskEditListener, TaskDeleteListener, TaskDoneListener, FilterChangeListener , TaskSpinnerListener {
 
     private static final String UserIdKey = "UserId";
 
-    private final TasksAdapter tasksAdapter = new TasksAdapter(this, this, this);
+    private final TasksAdapter tasksAdapter = new TasksAdapter(this, this, this,this);
 
     @BindView(R.id.tasks_recycler_view)
     RecyclerView recyclerView;
@@ -152,6 +153,12 @@ public class TasksFragment extends BaseMvpFragment<TasksPresenter>
             getPresenter().setupTasksSubscription2(UserId);
 
         }
+
+    }
+
+    @Override
+    public void onTaskSpinnerPriority(Task task) {
+        getPresenter().updateTaskPriority(task);
 
     }
 }

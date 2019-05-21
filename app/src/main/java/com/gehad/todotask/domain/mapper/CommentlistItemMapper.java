@@ -32,6 +32,7 @@ public class CommentlistItemMapper {
         return new CommentlistItem.Builder()
                 .setId(commentlistItemDb.getId())
                 .setDescription(commentlistItemDb.getDescription())
+                .setDueDate(commentlistItemDb.getDueDate())
                 .build();
     }
 

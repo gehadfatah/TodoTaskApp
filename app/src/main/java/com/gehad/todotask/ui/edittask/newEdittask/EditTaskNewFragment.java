@@ -7,13 +7,16 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gehad.todotask.R;
 import com.gehad.todotask.app.TodoApp;
@@ -60,7 +63,7 @@ public class EditTaskNewFragment extends BaseMvpFragment<EditTaskPresenterNew>
     ArrayList<CommentlistDataCollector> commentlistDataCollectors = new ArrayList<>();
     ArrayList<CommentlistDataCollector> newCommentlistDataCollectors = new ArrayList<>();
     CommentAdapter commentAdapter;
-    private LocalDate taskDate=null;
+    private LocalDate taskDate = null;
 
     public static EditTaskNewFragment newAddTaskInstance() {
         return new EditTaskNewFragment();
@@ -95,9 +98,20 @@ public class EditTaskNewFragment extends BaseMvpFragment<EditTaskPresenterNew>
     protected EditTaskPresenterNew createPresenter() {
         return TodoApp.getAppComponent(getContext()).addTaskNewFragmentComponent().getPresenter();
     }
+    private TextView.OnEditorActionListener editorListener = new TextView.OnEditorActionListener() {
+        @Override
+        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            switch (actionId) {
 
+                case EditorInfo.IME_ACTION_SEND:
+                    //Toast.makeText(MainActivity.this, "Send", Toast.LENGTH_SHORT).show();
+                    send_button_Click();
+                    break;
+            }
+            return false;
+        }
+    };
     public void setcomment_list_recycler() {
-
         comment_list_recycler.setHasFixedSize(true);
         for (CommentlistItem commentlistItem :
                 taskToEdit.getCommentlistItemList()) {
@@ -144,7 +158,7 @@ public class EditTaskNewFragment extends BaseMvpFragment<EditTaskPresenterNew>
         edit_text_message.setText("");
         commentAdapter.notifyItemInserted(commentAdapter.getItemCount() - 1);
 
-        comment_list_recycler.smoothScrollToPosition(commentAdapter.getItemCount() - 1);
+        comment_list_recycler.scrollToPosition(commentAdapter.getItemCount() - 1);
 
 
     }
@@ -152,9 +166,13 @@ public class EditTaskNewFragment extends BaseMvpFragment<EditTaskPresenterNew>
     public void setupWithTaskToEdit(Task task) {
         //checkListAdapter = new CheckListAdapter(this, task);
         // checkListRecyclerView.setAdapter(checkListAdapter);
+        edit_text_message.setOnEditorActionListener(editorListener);
+
         doneCheckbox.setChecked(task.isDone());
         spinner.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, Priority));
         spinner.setSelection(task.getPriority());
+        taskDate = task.getDueDate();
+
         if (task.getDueDate() != null) {
             //dueDateTextView.setText(task.getDueDate().toString());
             dueDateTextView.setText(LocalDateFormatterUtil.getShortMonthDayAndYearFormattedDate(task.getDueDate()));
@@ -167,7 +185,7 @@ public class EditTaskNewFragment extends BaseMvpFragment<EditTaskPresenterNew>
 
     @Override
     public void setTaskDueDate(LocalDate localDate) {
-       // dueDateTextView.setText(localDate.toString());
+        // dueDateTextView.setText(localDate.toString());
         taskDate = localDate;
         if (localDate != null) {
             String formattedDate = LocalDateFormatterUtil.getShortMonthDayAndYearFormattedDate(localDate);
