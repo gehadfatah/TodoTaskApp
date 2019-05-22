@@ -10,6 +10,7 @@ import org.threeten.bp.LocalDate;
 import javax.inject.Inject;
 
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
 import timber.log.Timber;
 
 public class EditTaskPresenterNew extends BasePresenter<EditTaskViewNew> {
@@ -57,7 +58,12 @@ public class EditTaskPresenterNew extends BasePresenter<EditTaskViewNew> {
                 .compose(RxTransformers.applyCompletableIoSchedulers())
                 .subscribe(
                         getMvpView()::finish,
-                        throwable -> Timber.e(throwable, "Error while updating task")
+                        new Consumer<Throwable>() {
+                            @Override
+                            public void accept(Throwable throwable) throws Exception {
+                                Timber.e(throwable, "Error while updating task");
+                            }
+                        }
                 )
         );
     }

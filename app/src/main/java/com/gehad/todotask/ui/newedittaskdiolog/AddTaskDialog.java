@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
@@ -13,15 +14,24 @@ import com.gehad.todotask.R;
 import com.gehad.todotask.app.TodoApp;
 import com.gehad.todotask.domain.model.Task;
 import com.gehad.todotask.ui.base.BaseMvpDialog;
+import com.gehad.todotask.ui.edittask.newEdittask.EditTaskNewFragment;
 import com.gehad.todotask.ui.login.LoginActivity;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.gehad.todotask.ui.edittask.newEdittask.EditTaskNewFragment.TAG;
+
 public class AddTaskDialog extends BaseMvpDialog<EditTaskDiologPresenter> implements EditTaskDialogView {
     Context context;
     // private CheckListAdapter checkListAdapter;
+    public static final String TAG = AddTaskDialog.class.getSimpleName();
 
     @BindView(R.id.taskTitleEd)
     TextInputEditText taskTitleEd;
@@ -77,8 +87,24 @@ public class AddTaskDialog extends BaseMvpDialog<EditTaskDiologPresenter> implem
                     .setTitle(taskTitleEd.getText().toString())
                     .setUserId(LoginActivity.user_name)
                     .build());
+            TodoApp.newInstance().getTasksColliction().document(taskTitleEd.getText().toString()).set(new Task.Builder()
+                    .setTitle(taskTitleEd.getText().toString())
+                    .setUserId(LoginActivity.user_name)
+                    .build()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+
+                }
+            });
 
         }
+
+
         dismiss();
     }
 
@@ -86,6 +112,7 @@ public class AddTaskDialog extends BaseMvpDialog<EditTaskDiologPresenter> implem
     @Override
     public void finish() {
         dismiss();
+
     }
 }
 

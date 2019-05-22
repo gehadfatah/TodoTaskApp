@@ -1,9 +1,11 @@
 package com.gehad.todotask.ui.tasks;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -18,6 +20,7 @@ import com.gehad.todotask.common.util.ItemOffsetDecoration;
 import com.gehad.todotask.domain.model.Task;
 import com.gehad.todotask.ui.base.BaseMvpFragment;
 import com.gehad.todotask.ui.edittask.newEdittask.EditTaskActivityNew;
+import com.gehad.todotask.ui.login.LoginActivity;
 import com.gehad.todotask.ui.newedittaskdiolog.AddTaskDialog;
 import com.gehad.todotask.ui.tasks.adapter.FilterChangeListener;
 import com.gehad.todotask.ui.tasks.adapter.TaskDeleteListener;
@@ -25,9 +28,15 @@ import com.gehad.todotask.ui.tasks.adapter.TaskDoneListener;
 import com.gehad.todotask.ui.tasks.adapter.TaskEditListener;
 import com.gehad.todotask.ui.tasks.adapter.TaskSpinnerListener;
 import com.gehad.todotask.ui.tasks.adapter.TasksAdapter;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class TasksFragment extends BaseMvpFragment<TasksPresenter>
         implements TasksView, TaskEditListener, TaskDeleteListener, TaskDoneListener, FilterChangeListener , TaskSpinnerListener {
+    public static final String TAG = TasksFragment.class.getSimpleName();
 
     private static final String UserIdKey = "UserId";
 
@@ -98,6 +107,7 @@ public class TasksFragment extends BaseMvpFragment<TasksPresenter>
         noTasksTextView.setVisibility(View.GONE);
         recyclerView.setVisibility(View.VISIBLE);
         tasksAdapter.showTasks(tasks);
+
     }
 
     @Override

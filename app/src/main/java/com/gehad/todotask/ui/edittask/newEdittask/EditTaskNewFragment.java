@@ -2,6 +2,7 @@ package com.gehad.todotask.ui.edittask.newEdittask;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.AppCompatCheckBox;
@@ -27,6 +28,8 @@ import com.gehad.todotask.ui.base.BaseMvpFragment;
 import com.gehad.todotask.ui.edittask.DatePickerDialogFragment;
 import com.gehad.todotask.ui.edittask.adapter.model.CommentlistDataCollector;
 import com.gehad.todotask.ui.login.LoginActivity;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.threeten.bp.LocalDate;
 
@@ -37,6 +40,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import timber.log.Timber;
 
 public class EditTaskNewFragment extends BaseMvpFragment<EditTaskPresenterNew>
         implements EditTaskViewNew, DatePickerDialog.OnDateSetListener {
@@ -236,6 +240,24 @@ public class EditTaskNewFragment extends BaseMvpFragment<EditTaskPresenterNew>
                 .setDueDate(dueDateTextView.getText().toString().contains("Date") ? null : taskDate/*LocalDate.parse(dueDateTextView.getText().toString())*/)
                 .setUserId(LoginActivity.user_name)
                 .build());
+        TodoApp.newInstance().getTasksColliction().document(taskToEdit.getTitle()).set(new Task.Builder()
+                .setId(taskToEdit.getId())
+                .setTitle(taskToEdit.getTitle())
+                .setIsDone(doneCheckbox.isChecked())
+                .setPriority(spinner.getSelectedItemPosition())
+                .setCommentList(/*getlistComment()*/getCommentListItemsFromCollectors(commentlistDataCollectors))
+                .setUserId(LoginActivity.user_name)
+                .build()).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Timber.d(" jdhf ",e);
+            }
+        }).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+
+            }
+        });
     }
 
     private List<CommentlistItem> getlistComment() {

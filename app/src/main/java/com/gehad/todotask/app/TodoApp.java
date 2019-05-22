@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 
 import com.facebook.stetho.Stetho;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.jakewharton.threetenabp.AndroidThreeTen;
 
 import com.gehad.todotask.BuildConfig;
@@ -41,5 +43,12 @@ public class TodoApp extends Application {
                 .builder()
                 .applicationModule(new ApplicationModule(this))
                 .build();
+    }
+    public static TodoApp newInstance() {
+        return new TodoApp();
+    }
+
+    public CollectionReference getTasksColliction() {
+        return  FirebaseFirestore.getInstance().collection("Tasks");
     }
 }

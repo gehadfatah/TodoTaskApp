@@ -16,6 +16,7 @@ import io.reactivex.Completable;
 import io.reactivex.Flowable;
 import io.reactivex.Single;
 import io.reactivex.SingleSource;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Function;
 import timber.log.Timber;
 
@@ -23,7 +24,7 @@ import timber.log.Timber;
 public class TasksRepository {
 
     private final AppDatabase appDatabase;
-
+    static long taskid = 0;
     @Inject
     public TasksRepository(AppDatabase appDatabase) {
 
@@ -31,16 +32,20 @@ public class TasksRepository {
     }
 
     public Completable saveNewTask(Task task) {
-        return Completable.fromAction(() -> {
-                    TaskDb taskDb = TaskMapper.toTaskDb(task);
-                    appDatabase.beginTransaction();
-                    try {
-                        long taskId = appDatabase.tasksDao().insertTask(taskDb);
-                        appDatabase.setTransactionSuccessful();
-                    } finally {
-                        appDatabase.endTransaction();
-                    }
-                }
+        return Completable.fromAction(new Action() {
+                                          @Override
+                                          public void run() throws Exception {
+                                              TaskDb taskDb = TaskMapper.toTaskDb(task);
+                                              appDatabase.beginTransaction();
+                                              try {
+                                                  long taskId = appDatabase.tasksDao().insertTask(taskDb);
+                                                  taskid = taskId;
+                                                  appDatabase.setTransactionSuccessful();
+                                              } finally {
+                                                  appDatabase.endTransaction();
+                                              }
+                                          }
+                                      }
         );
     }
 
