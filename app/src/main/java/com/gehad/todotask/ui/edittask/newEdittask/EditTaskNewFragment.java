@@ -107,7 +107,6 @@ public class EditTaskNewFragment extends BaseMvpFragment<EditTaskPresenterNew>
             switch (actionId) {
 
                 case EditorInfo.IME_ACTION_SEND:
-                    //Toast.makeText(MainActivity.this, "Send", Toast.LENGTH_SHORT).show();
                     send_button_Click();
                     break;
             }
@@ -145,7 +144,6 @@ public class EditTaskNewFragment extends BaseMvpFragment<EditTaskPresenterNew>
 
     @OnClick(R.id.send_button)
     public void send_button_Click() {
-        //  commentlistItems.add(new CommentlistItem(null,edit_text_message.getText().toString(),LocalDate.now()));
         CommentlistDataCollector commentlistDataCollector = new CommentlistDataCollector();
         commentlistDataCollector.setDescription(edit_text_message.getText().toString());
         commentlistDataCollector.setDueDate(new Date());
@@ -163,7 +161,7 @@ public class EditTaskNewFragment extends BaseMvpFragment<EditTaskPresenterNew>
             KeyboardUtils.hideSoftInput(getActivity());
         edit_text_message.setText("");
         commentAdapter.notifyItemInserted(commentlistItems.size() - 1);
-       // Collections.reverse(commentlistItems);
+        // Collections.reverse(commentlistItems);
         comment_list_recycler.scrollToPosition(0);
         commentAdapter.notifyDataSetChanged();
 
@@ -171,8 +169,7 @@ public class EditTaskNewFragment extends BaseMvpFragment<EditTaskPresenterNew>
     }
 
     public void setupWithTaskToEdit(Task task) {
-        //checkListAdapter = new CheckListAdapter(this, task);
-        // checkListRecyclerView.setAdapter(checkListAdapter);
+
         edit_text_message.setOnEditorActionListener(editorListener);
 
         doneCheckbox.setChecked(task.isDone());
@@ -218,19 +215,11 @@ public class EditTaskNewFragment extends BaseMvpFragment<EditTaskPresenterNew>
 
     public void onTaskRequestDate() {
         DatePickerDialogFragment.newInstance(this).show(getFragmentManager(), DatePickerDialogFragment.TAG);
+
     }
 
     public void saveTaskChange() {
-       /* getPresenter().updateTask(new Task.Builder()
-                .setId(taskToEdit.getId())
-                .setTitle(taskToEdit.getTitle())
-                .setIsDone(doneCheckbox.isChecked())
-                .setPriority(spinner.getSelectedItemPosition())
-                .setCommentList(taskToEdit.getCommentlistItemList())
-                .setDueDate(dueDateTextView.getText().toString().contains("Date") ? null : LocalDate.parse(dueDateTextView.getText().toString()))
-                .setUserId(LoginActivity.user_name)
-                .build());*/
-//here i send just newcomment to save it in comment table
+        //here i send just newcomment to save it in comment table
         getPresenter().updateTaskwithcomments(new Task.Builder()
                 .setId(taskToEdit.getId())
                 .setTitle(taskToEdit.getTitle())
@@ -240,31 +229,50 @@ public class EditTaskNewFragment extends BaseMvpFragment<EditTaskPresenterNew>
                 .setDueDate(dueDateTextView.getText().toString().contains("Date") ? null : taskDate/*LocalDate.parse(dueDateTextView.getText().toString())*/)
                 .setUserId(LoginActivity.user_name)
                 .build());
-        TodoApp.newInstance().getTasksColliction().document(taskToEdit.getTitle()).set(new Task.Builder()
+        //update document for task in firebase
+        /*TodoApp.newInstance().getTasksColliction().document(taskToEdit.getTitle()).set(new Task.Builder()
                 .setId(taskToEdit.getId())
                 .setTitle(taskToEdit.getTitle())
                 .setIsDone(doneCheckbox.isChecked())
                 .setPriority(spinner.getSelectedItemPosition())
-                .setCommentList(/*getlistComment()*/getCommentListItemsFromCollectors(commentlistDataCollectors))
+
+                .setCommentList(*//*getlistComment()*//*getCommentListItemsFromCollectors(commentlistDataCollectors))
                 .setUserId(LoginActivity.user_name)
                 .build()).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Timber.d(" jdhf ",e);
+                Timber.d(" onFailure saveTaskChange", e);
             }
         }).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
+                Timber.d(" onSuccess saveTaskChange", taskToEdit.toString());
 
             }
         });
+        //update date
+        updateDateTask();*/
     }
 
-    private List<CommentlistItem> getlistComment() {
-        ArrayList<CommentlistItem> commentlistItems = (ArrayList<CommentlistItem>) taskToEdit.getCommentlistItemList();
+    private void updateDateTask() {
+        if (taskDate != null)
+            TodoApp.newInstance().getTasksColliction().document(taskToEdit.getTitle()).update(
+                    "dueDate", taskDate
+            ).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Timber.d(" onFailure updateDateTask", e);
+                }
+            }).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Timber.d(" onSuccess  updateDateTask " + taskDate.toString());
 
-        return commentlistItems;
+                }
+            });
+
     }
+
 
     public List<CommentlistItem> getCommentListItemsFromCollectors(List<CommentlistDataCollector> commentlistDataCollectors) {
         List<CommentlistItem> commentlistItems = new ArrayList<>(commentlistDataCollectors.size());

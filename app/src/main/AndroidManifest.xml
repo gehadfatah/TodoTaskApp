@@ -26,6 +26,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.edittask.newEdittask.EditTaskActivityNew" />
+
+        <service android:name=".common.Services.UploadFirebaseTasksService" />
     </application>
 
 </manifest>

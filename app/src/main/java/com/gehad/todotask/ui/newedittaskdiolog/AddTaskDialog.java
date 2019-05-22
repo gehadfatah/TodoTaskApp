@@ -25,12 +25,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import timber.log.Timber;
 
 import static com.gehad.todotask.ui.edittask.newEdittask.EditTaskNewFragment.TAG;
 
 public class AddTaskDialog extends BaseMvpDialog<EditTaskDiologPresenter> implements EditTaskDialogView {
     Context context;
-    // private CheckListAdapter checkListAdapter;
     public static final String TAG = AddTaskDialog.class.getSimpleName();
 
     @BindView(R.id.taskTitleEd)
@@ -78,29 +78,26 @@ public class AddTaskDialog extends BaseMvpDialog<EditTaskDiologPresenter> implem
     public void createBtnClick() {
 
         if (!taskTitleEd.getText().toString().equals("")) {
-            // checkListRecyclerView.setAdapter(checkListAdapter);
-            // checkListAdapter.getTask();
-            //getPresenter().setupWithTask(null);
-
-            // getPresenter().saveTask();
             getPresenter().saveNewTask(new Task.Builder()
                     .setTitle(taskTitleEd.getText().toString())
                     .setUserId(LoginActivity.user_name)
                     .build());
-            TodoApp.newInstance().getTasksColliction().document(taskTitleEd.getText().toString()).set(new Task.Builder()
+          /*  TodoApp.newInstance().getTasksColliction().document(taskTitleEd.getText().toString()).set(new Task.Builder()
                     .setTitle(taskTitleEd.getText().toString())
                     .setUserId(LoginActivity.user_name)
                     .build()).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
+                    Timber.d(" onSuccess createBtnClick");
 
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
+                    Timber.d(" onFailure createBtnClick ", e);
 
                 }
-            });
+            });*/
 
         }
 

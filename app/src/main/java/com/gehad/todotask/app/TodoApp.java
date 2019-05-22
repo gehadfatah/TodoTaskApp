@@ -49,6 +49,7 @@ public class TodoApp extends Application {
     }
 
     public CollectionReference getTasksColliction() {
+
         return  FirebaseFirestore.getInstance().collection("Tasks");
     }
 }

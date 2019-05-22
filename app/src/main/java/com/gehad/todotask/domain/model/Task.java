@@ -41,6 +41,7 @@ public class Task implements Parcelable {
     public long getId() {
         return id;
     }
+
     public int getPriority() {
         return priority;
     }
