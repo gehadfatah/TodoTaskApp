@@ -1,7 +1,5 @@
 package com.gehad.todotask.ui.tasks;
 
-import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,14 +18,15 @@ import timber.log.Timber;
 
 import com.gehad.todotask.R;
 import com.gehad.todotask.app.TodoApp;
-import com.gehad.todotask.common.Services.UploadFirebaseTasksService;
 import com.gehad.todotask.common.util.ItemOffsetDecoration;
-import com.gehad.todotask.common.util.NetworkUtils;
+import com.gehad.todotask.data.local.converters.LocalDateConverter;
 import com.gehad.todotask.domain.model.Task;
+import com.gehad.todotask.domain.model.TaskFromFirebase;
 import com.gehad.todotask.ui.base.BaseMvpFragment;
-import com.gehad.todotask.ui.edittask.newEdittask.EditTaskActivityNew;
+import com.gehad.todotask.ui.edittask.EditTaskActivity;
+import com.gehad.todotask.ui.edittask.adapter.model.CommentlistDataCollectorForFirebase;
 import com.gehad.todotask.ui.login.LoginActivity;
-import com.gehad.todotask.ui.newedittaskdiolog.AddTaskDialog;
+import com.gehad.todotask.ui.newTaskdiolog.AddTaskDialog;
 import com.gehad.todotask.ui.tasks.adapter.FilterChangeListener;
 import com.gehad.todotask.ui.tasks.adapter.TaskDeleteListener;
 import com.gehad.todotask.ui.tasks.adapter.TaskDoneListener;
@@ -37,10 +36,6 @@ import com.gehad.todotask.ui.tasks.adapter.TasksAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -57,9 +52,11 @@ public class TasksFragment extends BaseMvpFragment<TasksPresenter>
     @BindView(R.id.no_tasks_text_view)
     TextView noTasksTextView;
     String UserId;
-    ArrayList<Task> taskArrayList;
+    ArrayList<Task> tasks = new ArrayList<>();
+    private int numberOfTasks = 0;
+    ArrayList<Long> taskIdsFromFirebase = new ArrayList<>();
 
-    public static TasksFragment newInstance(String userId/*TasksType tasksType*/) {
+    public static TasksFragment newInstance(String userId) {
         Bundle args = new Bundle();
         args.putString(UserIdKey, userId);
 
@@ -73,12 +70,11 @@ public class TasksFragment extends BaseMvpFragment<TasksPresenter>
         super.onViewCreated(view, savedInstanceState);
         setupRecyclerView();
         UserId = getArguments().getString(UserIdKey);
+        showLoading(true);
         getPresenter().setupTasksSubscription2(UserId);
-        getUserTasksFromFirebase();
     }
 
     public void getUserTasksFromFirebase() {
-        ArrayList<Task> tasks = new ArrayList<>();
         if (UserId != null)
             TodoApp.newInstance().getTasksColliction().whereEqualTo("userId", UserId)
                     .get()
@@ -88,12 +84,28 @@ public class TasksFragment extends BaseMvpFragment<TasksPresenter>
                             if (task.isSuccessful()) {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
                                     Log.d(TAG, document.getId() + " => " + document.getData());
-                                    Task task1 = document.toObject(Task.class);
-                                    tasks.add(task1);
+                                    TaskFromFirebase task1 = document.toObject(TaskFromFirebase.class);
+                                    Task task2 = new Task.Builder()
+                                            .setTitle(task1.getTitle())
+                                            .setDateTime(task1.getDateTime())
+                                            .setPriority(task1.getPriority())
+                                            .setId(task1.getId())
+                                            .setIsDone(task1.isDone())
+                                            .setDueDate(LocalDateConverter.fromLong(task1.getDueDate()))
+                                            .setCommentList(task1.getCommentlistItemList())
+                                            .setUserId(task1.getUserId())
+                                            .build();
+
+                                    tasks.add(task2);
+
+                                    //  CommentlistDataCollectorForFirebase commentlistDataCollectorForFirebase=document.toObject(document.get("commentlistItemList"))
+                                    //taskIdsFromFirebase.add()
                                 }
-                                Log.d(TAG, "success getting documents: " +tasks);
-                                //savetoDatabase(tasks);
+                                Log.d(TAG, "success getting documents: " + tasks);
+                                savetoDatabase(tasks);
                             } else {
+                                hideLoading();
+
                                 Log.d(TAG, "Error getting documents: ", task.getException());
                             }
                         }
@@ -102,10 +114,9 @@ public class TasksFragment extends BaseMvpFragment<TasksPresenter>
     }
 
     private void savetoDatabase(ArrayList<Task> tasks) {
-        for (Task task :
-                tasks) {
-            getPresenter().saveNewTask(task);
-        }
+        if (tasks.size() == 0) hideLoading();
+        else getPresenter().saveTasks(tasks);
+
 
     }
 
@@ -144,10 +155,14 @@ public class TasksFragment extends BaseMvpFragment<TasksPresenter>
     @Override
     public void onTaskDoneStateChange(Task task) {
         getPresenter().updateTaskDoneState(task);
+        //update also in firebase
+        updateTaskToFirebase(task);
+
     }
 
     @Override
     public void displayTasks(List<Task> tasks) {
+        hideLoading();
         noTasksTextView.setVisibility(View.GONE);
         recyclerView.setVisibility(View.VISIBLE);
         tasksAdapter.showTasks(tasks);
@@ -155,44 +170,9 @@ public class TasksFragment extends BaseMvpFragment<TasksPresenter>
         //uploadTasksToFirebase(tasks);
     }
 
-    private void uploadTasksToFirebase(List<Task> tasks) {
-        if (getActivity() == null) return;
-        Intent Intent = new Intent();
-        Intent.putParcelableArrayListExtra("tasks", (ArrayList<Task>) tasks);
-        Intent.putExtra("userId", UserId);
-        Intent.setClass(getActivity(), UploadFirebaseTasksService.class);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            getActivity().startForegroundService(Intent);
-        } else {
-            getActivity().startService(Intent);
-        }
-        /*for (Task task : tasks) {
-
-            TodoApp.newInstance().getTasksColliction().document(UserId + String.valueOf(System.currentTimeMillis())).set(new Task.Builder()
-                    .setId(task.getId())
-                    .setTitle(task.getTitle())
-                    .setIsDone(task.isDone())
-                    .setPriority(task.getPriority())
-                    .setCommentList(task.getCommentlistItemList())
-                    .setUserId(LoginActivity.user_name)
-                    .build()).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Timber.d(" onFailure uploadTasksToFirebase", e + " " + task.toString());
-                    //failedUploadtasks.add(task);
-                }
-            }).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    Timber.d(" onSuccess uploadTasksToFirebase", task.toString());
-
-                }
-            });
-        }*/
-    }
-
     @Override
     public void displayTasksDoneFirst(List<Task> tasks) {
+        hideLoading();
         noTasksTextView.setVisibility(View.GONE);
         recyclerView.setVisibility(View.VISIBLE);
         tasksAdapter.showTasksDonefirst(tasks);
@@ -209,16 +189,39 @@ public class TasksFragment extends BaseMvpFragment<TasksPresenter>
     public void showNoTasksView() {
         noTasksTextView.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.GONE);
+        //here i get tasks from firebase if user not have tasks for database
+        getUserTasksFromFirebase();
     }
 
     @Override
     public void showEditTaskView(Task task) {
-        EditTaskActivityNew.start(getContext(), task);
+        EditTaskActivity.start(getContext(), task);
     }
 
     @Override
     public void showTaskMarkedAsDoneMessage(String taskTitle) {
         showTextOnSnackbar(getString(R.string.message_task_marked_as_done, taskTitle), Snackbar.LENGTH_LONG);
+    }
+
+    @Override
+    public void saveTasksFromFirebase() {
+      /*  try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }*/
+        //saveCommentsForTasks();
+    }
+
+    private void saveCommentsForTasks() {
+
+        for (Task task : tasks) {
+
+            getPresenter().updateTaskwithcomments(task.getId(), task.getCommentlistItemList());
+
+            ++numberOfTasks;
+        }
+
     }
 
     @Override
@@ -229,6 +232,12 @@ public class TasksFragment extends BaseMvpFragment<TasksPresenter>
     @Override
     public void showTaskDeletedMessage(String taskTitle) {
         showTextOnSnackbar(getString(R.string.message_task_deleted, taskTitle), Snackbar.LENGTH_LONG);
+    }
+
+    @Override
+    public void addComments() {
+        if (numberOfTasks == tasks.size())
+            hideLoading();
     }
 
     @Override
@@ -247,6 +256,26 @@ public class TasksFragment extends BaseMvpFragment<TasksPresenter>
     @Override
     public void onTaskSpinnerPriority(Task task) {
         getPresenter().updateTaskPriority(task);
+        //update also in firebase
 
+        updateTaskToFirebase(task);
+    }
+
+    private void updateTaskToFirebase(Task task) {
+        TodoApp.newInstance().getTasksColliction().document(task.getUserId() + task.getDateTime()).update(
+                "done", task.isDone(),
+                "priority", task.getPriority()
+        ).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Timber.d(" onFailure saveTaskChange", e);
+            }
+        }).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Timber.d(" onSuccess saveTaskChange", task.toString());
+
+            }
+        });
     }
 }

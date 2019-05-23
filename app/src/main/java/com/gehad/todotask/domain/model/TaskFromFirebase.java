@@ -9,7 +9,7 @@ import org.threeten.bp.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Task implements Parcelable {
+public class TaskFromFirebase implements Parcelable {
 
     private  long id;
     private  long dateTime;
@@ -23,13 +23,13 @@ public class Task implements Parcelable {
     private  boolean isDone;
 
     @Nullable
-    private  LocalDate dueDate;
+    private  long dueDate;
 
     private  List<CommentlistItem> commentlistItemList;
 
 
-    private Task(long id,long dateTime, String title,String userId, String description,
-                 boolean isDone, @Nullable LocalDate dueDate, List<CommentlistItem> commentlistItemList,int priority) {
+    private TaskFromFirebase(long id, long dateTime, String title, String userId, String description,
+                             boolean isDone, @Nullable long dueDate, List<CommentlistItem> commentlistItemList, int priority) {
         this.id = id;
         this.dateTime = dateTime;
         this.title = title;
@@ -40,7 +40,7 @@ public class Task implements Parcelable {
         this.userId = userId;
         this.commentlistItemList = commentlistItemList;
     }
-    private Task() {
+    private TaskFromFirebase() {
 
     }
     public long getId() {
@@ -70,7 +70,7 @@ public class Task implements Parcelable {
     }
 
     @Nullable
-    public LocalDate getDueDate() {
+    public long getDueDate() {
         return dueDate;
     }
 
@@ -88,7 +88,7 @@ public class Task implements Parcelable {
         private String userId;
         private String description;
         private boolean isDone;
-        private LocalDate dueDate;
+        private long dueDate;
         private List<CommentlistItem> commentlistItemList;
 
         public Builder setId(long id) {
@@ -121,7 +121,7 @@ public class Task implements Parcelable {
             return this;
         }
 
-        public Builder setDueDate(LocalDate dueDate) {
+        public Builder setDueDate(long dueDate) {
             this.dueDate = dueDate;
             return this;
         }
@@ -131,8 +131,8 @@ public class Task implements Parcelable {
             this.commentlistItemList = commentlistItemList;
             return this;
         }
-        public Task build() {
-            return new Task(id, dateTime,title, userId,description, isDone, dueDate,commentlistItemList,priority);
+        public TaskFromFirebase build() {
+            return new TaskFromFirebase(id, dateTime,title, userId,description, isDone, dueDate,commentlistItemList,priority);
         }
     }
 
@@ -150,11 +150,11 @@ public class Task implements Parcelable {
         dest.writeString(this.userId);
         dest.writeString(this.description);
         dest.writeByte(this.isDone ? (byte) 1 : (byte) 0);
-        dest.writeSerializable(this.dueDate);
+        dest.writeLong(this.dueDate);
         dest.writeList(this.commentlistItemList);
     }
 
-    protected Task(Parcel in) {
+    protected TaskFromFirebase(Parcel in) {
         this.id = in.readLong();
         this.dateTime = in.readLong();
         this.priority = in.readInt();
@@ -162,20 +162,20 @@ public class Task implements Parcelable {
         this.userId = in.readString();
         this.description = in.readString();
         this.isDone = in.readByte() != 0;
-        this.dueDate = (LocalDate) in.readSerializable();
+        this.dueDate =  in.readLong();
         this.commentlistItemList = new ArrayList<>();
         in.readList(this.commentlistItemList, CommentlistItem.class.getClassLoader());
     }
 
-    public static final Parcelable.Creator<Task> CREATOR = new Parcelable.Creator<Task>() {
+    public static final Creator<TaskFromFirebase> CREATOR = new Creator<TaskFromFirebase>() {
         @Override
-        public Task createFromParcel(Parcel source) {
-            return new Task(source);
+        public TaskFromFirebase createFromParcel(Parcel source) {
+            return new TaskFromFirebase(source);
         }
 
         @Override
-        public Task[] newArray(int size) {
-            return new Task[size];
+        public TaskFromFirebase[] newArray(int size) {
+            return new TaskFromFirebase[size];
         }
     };
 }

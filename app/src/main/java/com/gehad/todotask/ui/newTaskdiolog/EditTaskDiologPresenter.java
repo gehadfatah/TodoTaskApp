@@ -1,4 +1,4 @@
-package com.gehad.todotask.ui.newedittaskdiolog;
+package com.gehad.todotask.ui.newTaskdiolog;
 
 import com.gehad.todotask.common.util.RxTransformers;
 import com.gehad.todotask.domain.TaskController;

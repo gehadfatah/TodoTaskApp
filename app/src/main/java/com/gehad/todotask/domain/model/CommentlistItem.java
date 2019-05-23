@@ -10,17 +10,20 @@ import java.util.Date;
 
 public class CommentlistItem implements Parcelable {
 
-    private final long id;
+    private long id;
 
-    private final String description;
+    private String description;
     @Nullable
-    private final Date dueDate;
+    private Date dueDate;
 
-    public CommentlistItem( long id, String description, @Nullable Date dueDate) {
+    public CommentlistItem(long id, String description, @Nullable Date dueDate) {
         this.id = id;
         this.description = description;
         this.dueDate = dueDate;
 
+    }
+
+    public CommentlistItem() {
     }
 
     public long getId() {
@@ -42,7 +45,7 @@ public class CommentlistItem implements Parcelable {
         private String description;
         private Date dueDate;
 
-        public Builder setId( long id) {
+        public Builder setId(long id) {
             this.id = id;
             return this;
         }

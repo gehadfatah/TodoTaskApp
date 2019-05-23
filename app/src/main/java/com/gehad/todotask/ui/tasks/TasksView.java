@@ -17,8 +17,11 @@ public interface TasksView extends MvpView {
     void showEditTaskView(Task task);
 
     void showTaskMarkedAsDoneMessage(String taskTitle);
+    void saveTasksFromFirebase();
 
     void showTaskUnmarkedAsDoneMessage(String taskTitle);
 
     void showTaskDeletedMessage(String taskTitle);
+
+    void addComments();
 }

@@ -1,10 +1,9 @@
-package com.gehad.todotask.ui.newedittaskdiolog;
+package com.gehad.todotask.ui.newTaskdiolog;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
@@ -14,20 +13,14 @@ import com.gehad.todotask.R;
 import com.gehad.todotask.app.TodoApp;
 import com.gehad.todotask.domain.model.Task;
 import com.gehad.todotask.ui.base.BaseMvpDialog;
-import com.gehad.todotask.ui.edittask.newEdittask.EditTaskNewFragment;
 import com.gehad.todotask.ui.login.LoginActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import timber.log.Timber;
-
-import static com.gehad.todotask.ui.edittask.newEdittask.EditTaskNewFragment.TAG;
 
 public class AddTaskDialog extends BaseMvpDialog<EditTaskDiologPresenter> implements EditTaskDialogView {
     Context context;
@@ -82,17 +75,18 @@ public class AddTaskDialog extends BaseMvpDialog<EditTaskDiologPresenter> implem
             getPresenter().saveNewTask(new Task.Builder()
                     .setTitle(taskTitleEd.getText().toString())
                     .setDateTime(time)
-
+                    .setId(time)
                     .setUserId(LoginActivity.user_name)
                     .build());
             TodoApp.newInstance().getTasksColliction().document(LoginActivity.user_name + time).set(new Task.Builder()
                     .setTitle(taskTitleEd.getText().toString())
                     .setUserId(LoginActivity.user_name)
                     .setDateTime(time)
+                    .setId(time)
                     .build()).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
-                    Timber.d(" onSuccess createBtnClick");
+                    Timber.d(" onSuccess createBtnClick time " + time);
 
                 }
             }).addOnFailureListener(new OnFailureListener() {

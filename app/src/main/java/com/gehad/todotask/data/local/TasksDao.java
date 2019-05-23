@@ -10,7 +10,9 @@ import org.threeten.bp.LocalDate;
 
 import java.util.List;
 
+import com.gehad.todotask.data.local.model.CommentlistItemDb;
 import com.gehad.todotask.data.local.model.TaskDb;
+
 import io.reactivex.Flowable;
 import io.reactivex.Single;
 
@@ -23,6 +25,9 @@ public interface TasksDao {
     @Update
     int updateTask(TaskDb taskDb);
 
+    @Insert
+    void insertAll(List<TaskDb> taskDbs);
+
     @Query("SELECT * FROM task WHERE is_done = 0")
     Flowable<List<TaskDb>> getToDoTasks();
 
@@ -31,8 +36,10 @@ public interface TasksDao {
 
     @Query("SELECT * FROM task WHERE userId=:userId")
     Flowable<List<TaskDb>> getAllTasks(String userId);
+
     @Query("SELECT * FROM task ")
-    Flowable<List<TaskDb>> getAllTasks( );
+    Flowable<List<TaskDb>> getAllTasks();
+
     @Query("SELECT * FROM task WHERE is_done = 0 AND due_date < :localDate")
     Flowable<List<TaskDb>> getTaskWithDueDateBefore(LocalDate localDate);
 

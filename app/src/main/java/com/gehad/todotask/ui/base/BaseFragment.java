@@ -10,10 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.gehad.todotask.common.util.CommonUtils;
+
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 public abstract class BaseFragment extends Fragment {
+    private ProgressDialog mProgressDialog;
 
     private Unbinder unbinder;
 
@@ -28,6 +31,15 @@ public abstract class BaseFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+    public void showLoading(boolean cancelable) {
+        hideLoading();
+        mProgressDialog = CommonUtils.showLoadingDialog(this.getContext(),cancelable);
+    }
+    public void hideLoading() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.cancel();
+        }
     }
 
     @LayoutRes

@@ -2,9 +2,7 @@ package com.gehad.todotask.ui.login;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputEditText;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -14,18 +12,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.gehad.todotask.R;
-import com.gehad.todotask.app.TodoApp;
-import com.gehad.todotask.domain.model.Task;
-import com.gehad.todotask.ui.TasksMain.TaskActivity;
+import com.gehad.todotask.ui.tasks.TaskActivity;
 import com.gehad.todotask.ui.base.BaseActivity;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-
-import org.w3c.dom.Text;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import timber.log.Timber;
 
 public class LoginActivity extends BaseActivity {
     @BindView(R.id.userName)

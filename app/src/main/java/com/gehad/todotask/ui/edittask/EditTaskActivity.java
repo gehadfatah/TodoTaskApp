@@ -1,29 +1,35 @@
-package com.gehad.todotask.ui.edittask.newEdittask;
+package com.gehad.todotask.ui.edittask;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.gehad.todotask.R;
+import com.gehad.todotask.app.TodoApp;
 import com.gehad.todotask.domain.model.Task;
 import com.gehad.todotask.ui.base.BaseActivity;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class EditTaskActivityNew extends BaseActivity {
+public class EditTaskActivity extends BaseActivity {
 
     public static final String TASK_TO_EDIT_EXTRA = "TASK_TO_EDIT_EXTRA";
     EditTaskNewFragment fragmentToReplace;
     Task taskToEdit;
+    public static final String TAG = EditTaskActivity.class.getSimpleName();
 
     @BindView(R.id.taskName)
     TextView taskName;
 
     public static void start(Context context, Task task) {
-        Intent starter = new Intent(context, EditTaskActivityNew.class);
+        Intent starter = new Intent(context, EditTaskActivity.class);
         starter.putExtra(TASK_TO_EDIT_EXTRA, task);
         context.startActivity(starter);
     }
@@ -55,22 +61,35 @@ public class EditTaskActivityNew extends BaseActivity {
 
     @OnClick(R.id.backImage)
     public void backImageClick() {
-        //fragmentToReplace = (EditTaskNewFragment) getSupportFragmentManager().findFragmentByTag(EditTaskNewFragment.TAG);
         fragmentToReplace.saveTaskChange();
 
-       // Intent intent = new Intent(this, TaskActivity.class);
-        //startActivity(intent);
-       // finish();
     }
 
 
     @OnClick(R.id.deleteImg)
     public void deleteImgClick() {
-        if (taskToEdit != null)
+        if (taskToEdit != null) {
             fragmentToReplace.TaskDelete(taskToEdit);
-        //Intent intent = new Intent(this, TaskActivity.class);
-       // startActivity(intent);
+            deletFromFirebase(taskToEdit);
+        }
         finish();
+    }
+
+    private void deletFromFirebase(Task task) {
+        TodoApp.newInstance().getTasksColliction().document(task.getUserId() + task.getDateTime())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error deleting document", e);
+                    }
+                });
     }
 
     @Override

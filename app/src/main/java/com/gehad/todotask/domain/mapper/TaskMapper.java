@@ -1,5 +1,6 @@
 package com.gehad.todotask.domain.mapper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.gehad.todotask.data.local.model.CommentlistItemDb;
@@ -19,6 +20,16 @@ public class TaskMapper {
                 task.getDueDate(),task.getUserId());
     }
 
+
+    public static List<TaskDb> toTasklistItemDbList( List<Task> taskList) {
+        List<TaskDb> taskDbs = new ArrayList<>(taskList.size());
+
+        for (Task commentlistItem : taskList) {
+            taskDbs.add(toTaskDb( commentlistItem));
+        }
+
+        return taskDbs;
+    }
     public static Task fromTaskDbAndCommentlistDbList(TaskDb taskDb, List<CommentlistItemDb> commentlistItemList) {
         List<CommentlistItem> commentlistItemLists = CommentlistItemMapper.toCommentlistItemList(commentlistItemList);
         return new Task.Builder()

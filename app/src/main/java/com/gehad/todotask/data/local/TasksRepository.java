@@ -2,6 +2,7 @@ package com.gehad.todotask.data.local;
 
 import org.threeten.bp.LocalDate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -11,7 +12,9 @@ import com.gehad.todotask.data.local.model.CommentlistItemDb;
 import com.gehad.todotask.data.local.model.TaskDb;
 import com.gehad.todotask.domain.mapper.CommentlistItemMapper;
 import com.gehad.todotask.domain.mapper.TaskMapper;
+import com.gehad.todotask.domain.model.CommentlistItem;
 import com.gehad.todotask.domain.model.Task;
+
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
 import io.reactivex.Single;
@@ -25,6 +28,7 @@ public class TasksRepository {
 
     private final AppDatabase appDatabase;
     static long taskid = 0;
+
     @Inject
     public TasksRepository(AppDatabase appDatabase) {
 
@@ -49,6 +53,32 @@ public class TasksRepository {
         );
     }
 
+    public Completable saveTasks(List<Task> tasks) {
+        return Completable.fromAction(new Action() {
+                                          @Override
+                                          public void run() throws Exception {
+                                              appDatabase.beginTransaction();
+                                              try {
+                                                  List<TaskDb> taskDbs =
+                                                          TaskMapper.toTasklistItemDbList(tasks);
+                                                  appDatabase.tasksDao().insertAll(taskDbs);
+                                                  for (Task task :
+                                                          tasks) {
+                                                      List<CommentlistItemDb> toCommentItemDbsToAdd =
+                                                              CommentlistItemMapper.toCommentlistItemDbList(task.getId(), task.getCommentlistItemList());
+                                                      appDatabase.commentlistDao().insertAll(toCommentItemDbsToAdd);
+                                                  }
+
+                                                  appDatabase.setTransactionSuccessful();
+                                              } finally {
+                                                  appDatabase.endTransaction();
+                                              }
+
+                                          }
+                                      }
+        );
+    }
+
     public Completable updateTaskWithComments(Task task) {
         return Completable.fromAction(() -> {
                     TaskDb taskDb = TaskMapper.toTaskDb(task);
@@ -58,6 +88,22 @@ public class TasksRepository {
 
                         List<CommentlistItemDb> toCommentItemDbsToAdd =
                                 CommentlistItemMapper.toCommentlistItemDbList(task.getId(), task.getCommentlistItemList());
+                        appDatabase.commentlistDao().insertAll(toCommentItemDbsToAdd);
+
+                        appDatabase.setTransactionSuccessful();
+                    } finally {
+                        appDatabase.endTransaction();
+                    }
+                }
+        );
+    }
+    public Completable updateTaskWithCommentsFromFirebase(long taskid, List<CommentlistItem> commentlistItemList) {
+        return Completable.fromAction(() -> {
+                    appDatabase.beginTransaction();
+                    try {
+
+                        List<CommentlistItemDb> toCommentItemDbsToAdd =
+                                CommentlistItemMapper.toCommentlistItemDbList(taskid, commentlistItemList);
                         appDatabase.commentlistDao().insertAll(toCommentItemDbsToAdd);
 
                         appDatabase.setTransactionSuccessful();
@@ -95,18 +141,21 @@ public class TasksRepository {
                 .flatMapSingle(this::getTasksWithCommentlistFromTaskDbs);
     }
 
-    public Flowable<List<Task>> getAllTasks(String  userid) {
+    public Flowable<List<Task>> getAllTasks(String userid) {
         return appDatabase.tasksDao().getAllTasks(userid)
                 .flatMapSingle(this::getTasksWithCommentlistFromTaskDbs);
     }
-    public Flowable<List<Task>> getAllTasks(  ) {
+
+    public Flowable<List<Task>> getAllTasks() {
         return appDatabase.tasksDao().getAllTasks()
                 .flatMapSingle(this::getTasksWithCommentlistFromTaskDbs);
     }
-    public Flowable<List<Task>> getAllTasksWithComments(String  userid) {
+
+    public Flowable<List<Task>> getAllTasksWithComments(String userid) {
         return appDatabase.tasksDao().getAllTasks(userid)
                 .flatMapSingle(this::getTasksWithCommentlistFromTaskDbs);
     }
+
     public Flowable<List<Task>> getTasksWithDueDateBefore(LocalDate date) {
         return appDatabase.tasksDao().getTaskWithDueDateBefore(date)
                 .flatMapSingle(this::getTasksWithCommentlistFromTaskDbs);

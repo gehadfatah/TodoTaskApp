@@ -1,4 +1,4 @@
-package com.gehad.todotask.ui.edittask.newEdittask;
+package com.gehad.todotask.ui.edittask;
 
 import com.gehad.todotask.common.di.FragmentScope;
 

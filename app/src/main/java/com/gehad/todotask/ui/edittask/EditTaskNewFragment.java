@@ -1,4 +1,4 @@
-package com.gehad.todotask.ui.edittask.newEdittask;
+package com.gehad.todotask.ui.edittask;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
@@ -20,13 +20,15 @@ import android.widget.TextView;
 
 import com.gehad.todotask.R;
 import com.gehad.todotask.app.TodoApp;
+import com.gehad.todotask.common.util.CommonUtils;
 import com.gehad.todotask.common.util.KeyboardUtils;
 import com.gehad.todotask.common.util.LocalDateFormatterUtil;
 import com.gehad.todotask.domain.model.CommentlistItem;
 import com.gehad.todotask.domain.model.Task;
 import com.gehad.todotask.ui.base.BaseMvpFragment;
-import com.gehad.todotask.ui.edittask.DatePickerDialogFragment;
+import com.gehad.todotask.ui.edittask.adapter.CommentAdapter;
 import com.gehad.todotask.ui.edittask.adapter.model.CommentlistDataCollector;
+import com.gehad.todotask.ui.edittask.adapter.model.CommentlistDataCollectorForFirebase;
 import com.gehad.todotask.ui.login.LoginActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -36,7 +38,9 @@ import org.threeten.bp.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -66,6 +70,7 @@ public class EditTaskNewFragment extends BaseMvpFragment<EditTaskPresenterNew>
     ArrayList<CommentlistDataCollector> newCommentlistDataCollectors = new ArrayList<>();
     CommentAdapter commentAdapter;
     private LocalDate taskDate = null;
+    long time;
 
     public static EditTaskNewFragment newAddTaskInstance() {
         return new EditTaskNewFragment();
@@ -144,6 +149,7 @@ public class EditTaskNewFragment extends BaseMvpFragment<EditTaskPresenterNew>
 
     @OnClick(R.id.send_button)
     public void send_button_Click() {
+        if (edit_text_message.getText().toString().isEmpty()) return;
         CommentlistDataCollector commentlistDataCollector = new CommentlistDataCollector();
         commentlistDataCollector.setDescription(edit_text_message.getText().toString());
         commentlistDataCollector.setDueDate(new Date());
@@ -176,7 +182,7 @@ public class EditTaskNewFragment extends BaseMvpFragment<EditTaskPresenterNew>
         spinner.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, Priority));
         spinner.setSelection(task.getPriority());
         taskDate = task.getDueDate();
-
+        time = task.getDateTime();
         if (task.getDueDate() != null) {
             //dueDateTextView.setText(task.getDueDate().toString());
             dueDateTextView.setText(LocalDateFormatterUtil.getShortMonthDayAndYearFormattedDate(task.getDueDate()));
@@ -226,24 +232,27 @@ public class EditTaskNewFragment extends BaseMvpFragment<EditTaskPresenterNew>
                 .setTitle(taskToEdit.getTitle())
                 .setIsDone(doneCheckbox.isChecked())
                 .setPriority(spinner.getSelectedItemPosition())
-                .setCommentList(/*getlistComment()*/getCommentListItemsFromCollectors(newCommentlistDataCollectors))
+                .setCommentList(getCommentListItemsFromCollectors(newCommentlistDataCollectors))
                 .setDueDate(dueDateTextView.getText().toString().contains("Date") ? null : taskDate/*LocalDate.parse(dueDateTextView.getText().toString())*/)
                 .setUserId(LoginActivity.user_name)
                 .build());
 
 
         //update document for task in firebase
-        TodoApp.newInstance().getTasksColliction().document(taskToEdit.getUserId() + taskToEdit.getDateTime()).set(new Task.Builder()
-                .setId(taskToEdit.getId()+taskToEdit.getDateTime())
-                .setTitle(taskToEdit.getTitle())
-                .setDateTime(taskToEdit.getDateTime())
+        updateTaskToFirebase();
+        //then update Comments
+        updateCommentTask();
+    }
 
-                .setIsDone(doneCheckbox.isChecked())
-                .setPriority(spinner.getSelectedItemPosition())
+    private void updateTaskToFirebase() {
+        TodoApp.newInstance().getTasksColliction().document(taskToEdit.getUserId() + time).update(
+                "done", doneCheckbox.isChecked(),
+                "priority", spinner.getSelectedItemPosition(),
+                "dueDate", taskDate == null ? null : taskDate.toEpochDay()
 
-                .setCommentList(getCommentListItemsFromCollectors(commentlistDataCollectors))
-                .setUserId(LoginActivity.user_name)
-                .build()).addOnFailureListener(new OnFailureListener() {
+
+                /* .setCommentList(getCommentListItemsFromCollectors(commentlistDataCollectors))*/
+        ).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Timber.d(" onFailure saveTaskChange", e);
@@ -255,14 +264,15 @@ public class EditTaskNewFragment extends BaseMvpFragment<EditTaskPresenterNew>
 
             }
         });
-        //update date
-      //  updateDateTask();
     }
 
-    private void updateDateTask() {
+    private void updateCommentTask() {
+
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("commentlistItemList", getCommentListItemsFromCollectorsForFirevbase(commentlistDataCollectors, taskToEdit.getDateTime()));
         if (taskDate != null)
-            TodoApp.newInstance().getTasksColliction().document(taskToEdit.getTitle()).update(
-                    "dueDate", taskDate
+            TodoApp.newInstance().getTasksColliction().document(taskToEdit.getUserId() + time).update(
+                    updates
             ).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
@@ -288,6 +298,15 @@ public class EditTaskNewFragment extends BaseMvpFragment<EditTaskPresenterNew>
                             .setDescription(commentlistDataCollector.getDescription())
                             .setDueDate(commentlistDataCollector.getDueDate())
                             .build());
+        }
+        return commentlistItems;
+    }
+
+    public List<CommentlistDataCollectorForFirebase> getCommentListItemsFromCollectorsForFirevbase(List<CommentlistDataCollector> commentlistDataCollectors, long taskId) {
+        List<CommentlistDataCollectorForFirebase> commentlistItems = new ArrayList<>(commentlistDataCollectors.size());
+        for (CommentlistDataCollector commentlistDataCollector : commentlistDataCollectors) {
+            commentlistItems.add(
+                    new CommentlistDataCollectorForFirebase(commentlistDataCollector.getId(), taskId, commentlistDataCollector.getDescription(), commentlistDataCollector.getDueDate()));
         }
         return commentlistItems;
     }

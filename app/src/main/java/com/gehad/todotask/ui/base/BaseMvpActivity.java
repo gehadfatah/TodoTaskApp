@@ -2,8 +2,10 @@ package com.gehad.todotask.ui.base;
 
 import android.os.Bundle;
 
-public abstract class BaseMvpActivity<T extends Presenter> extends BaseActivity implements MvpView {
+import com.gehad.todotask.common.util.CommonUtils;
 
+public abstract class BaseMvpActivity<T extends Presenter> extends BaseActivity implements MvpView {
+    private ProgressDialog mProgressDialog;
     private T presenter;
 
     @Override
@@ -11,6 +13,17 @@ public abstract class BaseMvpActivity<T extends Presenter> extends BaseActivity 
         super.onCreate(savedInstanceState);
         presenter = createPresenter();
         attachViewToPresenter();
+    }
+
+    public void showLoading(boolean cancelable) {
+        hideLoading();
+        mProgressDialog = CommonUtils.showLoadingDialog(this, cancelable);
+    }
+
+    public void hideLoading() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.cancel();
+        }
     }
 
     private void attachViewToPresenter() {

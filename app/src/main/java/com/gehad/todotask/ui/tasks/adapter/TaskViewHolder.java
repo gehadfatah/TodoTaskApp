@@ -1,7 +1,9 @@
 package com.gehad.todotask.ui.tasks.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,11 +22,18 @@ import butterknife.OnCheckedChanged;
 import timber.log.Timber;
 
 import com.gehad.todotask.R;
+import com.gehad.todotask.app.TodoApp;
 import com.gehad.todotask.common.util.LocalDateFormatterUtil;
 import com.gehad.todotask.domain.model.Task;
 import com.gehad.todotask.ui.base.BaseViewHolder;
+import com.gehad.todotask.ui.edittask.EditTaskNewFragment;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+
+import static com.gehad.todotask.ui.edittask.EditTaskNewFragment.TAG;
 
 public class TaskViewHolder extends BaseViewHolder<Task> implements Toolbar.OnMenuItemClickListener {
+    public static final String TAG = TaskViewHolder.class.getSimpleName();
 
     private final TaskEditListener taskEditListener;
     private final TaskSpinnerListener taskSpinnerListener;
@@ -129,7 +138,7 @@ public class TaskViewHolder extends BaseViewHolder<Task> implements Toolbar.OnMe
             @Override
             public void onClick(View v) {
                 taskDeleteListener.onTaskDelete(currentTask);
-
+                deletFromFirebase(currentTask);
 
             }
         });
@@ -138,6 +147,22 @@ public class TaskViewHolder extends BaseViewHolder<Task> implements Toolbar.OnMe
 
     }
 
+    private void deletFromFirebase(Task task) {
+        TodoApp.newInstance().getTasksColliction().document(task.getUserId() + task.getDateTime())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error deleting document", e);
+                    }
+                });
+    }
 
 
     @Override

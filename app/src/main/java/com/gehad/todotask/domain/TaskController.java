@@ -7,6 +7,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import com.gehad.todotask.data.local.TasksRepository;
+import com.gehad.todotask.domain.model.CommentlistItem;
 import com.gehad.todotask.domain.model.Task;
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
@@ -23,10 +24,16 @@ public class TaskController {
     public Completable saveNewTask(Task task) {
         return tasksRepository.saveNewTask(task);
     }
+    public Completable saveTasks(List<Task>  tasks) {
+        return tasksRepository.saveTasks(tasks);
+    }
 
 
     public Completable updateTaskWithCommentlist(Task task    ) {
         return tasksRepository.updateTaskWithComments(task);
+    }
+    public Completable updateTaskWithCommentsFromFirebase(long taskid, List<CommentlistItem> commentlistItemList) {
+        return tasksRepository.updateTaskWithCommentsFromFirebase(taskid,commentlistItemList);
     }
 
     public Completable updateTaskOnly(Task task) {

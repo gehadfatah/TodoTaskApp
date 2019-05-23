@@ -1,4 +1,4 @@
-package com.gehad.todotask.ui.edittask.newEdittask;
+package com.gehad.todotask.ui.edittask.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.gehad.todotask.R;
 import com.gehad.todotask.common.util.DateUtils;
-import com.gehad.todotask.common.util.LocalDateFormatterUtil;
 import com.gehad.todotask.domain.model.CommentlistItem;
 
 import java.util.ArrayList;

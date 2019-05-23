@@ -9,11 +9,13 @@ import javax.inject.Inject;
 
 import com.gehad.todotask.common.util.RxTransformers;
 import com.gehad.todotask.domain.TaskController;
+import com.gehad.todotask.domain.model.CommentlistItem;
 import com.gehad.todotask.domain.model.Task;
 import com.gehad.todotask.ui.base.BasePresenter;
 
 import io.reactivex.Flowable;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
 import timber.log.Timber;
 
 public class TasksPresenter extends BasePresenter<TasksView> {
@@ -38,21 +40,7 @@ public class TasksPresenter extends BasePresenter<TasksView> {
         getMvpView().showAddTaskView();
     }
 
-    public void setupTasksSubscription(TasksType taskType) {
-        compositeDisposable.add(
-                getTaskFlowableBasedOnType(taskType)
-                        .compose(RxTransformers.applyFlowableIoSchedulers())
-                        .subscribe(
-                                tasks -> {
-                                    if (tasks.isEmpty()) {
-                                        getMvpView().showNoTasksView();
-                                    } else {
-                                        getMvpView().displayTasks(tasks);
-                                    }
-                                },
-                                throwable -> Timber.d("Error occurred while loading tasks", throwable)
-                        ));
-    }
+
 
     public void setupTasksSubscription2(String userId) {
         compositeDisposable.add(
@@ -88,19 +76,7 @@ public class TasksPresenter extends BasePresenter<TasksView> {
                         ));
     }
 
-    private Flowable<List<Task>> getTaskFlowableBasedOnType(TasksType tasksType) {
-        switch (tasksType) {
-            case TODO:
-                return taskController.getToDoTasks();
-            case DONE:
-                return taskController.getDoneTasks();
-            case FINISHING:
-                return taskController.getTasksWithDueDateBefore(LocalDate.now().plus(FINISHING_TASKS_PERIOD, ChronoUnit.DAYS));
 
-            default:
-                throw new IllegalArgumentException("Unknown task type");
-        }
-    }
 
     private Flowable<List<Task>> getTaskFlowable(String userId) {
         return taskController.getAllTasksWithComments(userId);
@@ -149,12 +125,27 @@ public class TasksPresenter extends BasePresenter<TasksView> {
                                 Timber.e(throwable, "Error while deleting task")));
     }
 
-    public void saveNewTask(Task task) {
-        compositeDisposable.add(taskController.saveNewTask(task)
+    public void saveTasks(List<Task> tasks) {
+        compositeDisposable.add(taskController.saveTasks(tasks)
                 .compose(RxTransformers.applyCompletableIoSchedulers())
                 .subscribe(
-                        () -> Timber.d("", ""),
+                        () -> getMvpView().saveTasksFromFirebase()
+                        /* Timber.d("", "")*/,
                         throwable -> Timber.e(throwable, "Error while saving task")
+                )
+        );
+    }
+    public void updateTaskwithcomments(long taskid, List<CommentlistItem> commentlistItemList) {
+        compositeDisposable.add(taskController.updateTaskWithCommentsFromFirebase(taskid,commentlistItemList)
+                .compose(RxTransformers.applyCompletableIoSchedulers())
+                .subscribe(
+                        getMvpView()::addComments,
+                        new Consumer<Throwable>() {
+                            @Override
+                            public void accept(Throwable throwable) throws Exception {
+                                Timber.e(throwable, "Error while updating task");
+                            }
+                        }
                 )
         );
     }
