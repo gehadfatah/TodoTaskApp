@@ -26,9 +26,11 @@ public class TaskDb {
     @Nullable
     @ColumnInfo(name = "due_date")
     private final LocalDate dueDate;
+    private final long dateTime;
 
-    public TaskDb(long id, String title, String description, int priority, boolean isDone, @Nullable LocalDate dueDate, String userId) {
+    public TaskDb(long id, long dateTime,String title, String description, int priority, boolean isDone, @Nullable LocalDate dueDate, String userId) {
         this.id = id;
+        this.dateTime = dateTime;
         this.title = title;
         this.description = description;
         this.isDone = isDone;
@@ -39,6 +41,9 @@ public class TaskDb {
     }
 
     public long getId() {
+        return id;
+    }
+    public long getDateTime() {
         return id;
     }
 

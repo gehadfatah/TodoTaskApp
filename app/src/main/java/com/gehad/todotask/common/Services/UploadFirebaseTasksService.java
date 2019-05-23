@@ -81,6 +81,7 @@ public class UploadFirebaseTasksService extends IntentService {
             TodoApp.newInstance().getTasksColliction().document(userId + String.valueOf(System.currentTimeMillis())).set(new Task.Builder()
                     .setId(task.getId())
                     .setTitle(task.getTitle())
+                    .setDateTime(task.getDateTime())
                     .setIsDone(task.isDone())
                     .setPriority(task.getPriority())
                     .setCommentList(task.getCommentlistItemList())

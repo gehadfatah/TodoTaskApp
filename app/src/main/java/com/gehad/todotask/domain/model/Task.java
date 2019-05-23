@@ -11,24 +11,27 @@ import java.util.List;
 
 public class Task implements Parcelable {
 
-    private final long id;
+    private  long id;
+    private  long dateTime;
 
-    private final String title;
-    private final String userId;
-    private final int priority;
+    private  String title;
+    private  String userId;
+    private  int priority;
 
-    private final String description;
+    private String description;
 
-    private final boolean isDone;
+    private  boolean isDone;
 
     @Nullable
-    private final LocalDate dueDate;
+    private  LocalDate dueDate;
 
-    private final List<CommentlistItem> commentlistItemList;
+    private  List<CommentlistItem> commentlistItemList;
 
-    private Task(long id, String title,String userId, String description,
+
+    private Task(long id,long dateTime, String title,String userId, String description,
                  boolean isDone, @Nullable LocalDate dueDate, List<CommentlistItem> commentlistItemList,int priority) {
         this.id = id;
+        this.dateTime = dateTime;
         this.title = title;
         this.description = description;
         this.isDone = isDone;
@@ -37,9 +40,14 @@ public class Task implements Parcelable {
         this.userId = userId;
         this.commentlistItemList = commentlistItemList;
     }
+    private Task() {
 
+    }
     public long getId() {
         return id;
+    }
+    public long getDateTime() {
+        return dateTime;
     }
 
     public int getPriority() {
@@ -74,6 +82,7 @@ public class Task implements Parcelable {
     public static class Builder {
 
         private long id;
+        private long dateTime;
         private int priority;
         private String title;
         private String userId;
@@ -84,6 +93,9 @@ public class Task implements Parcelable {
 
         public Builder setId(long id) {
             this.id = id;
+            return this;
+        } public Builder setDateTime(long dateTime) {
+            this.id = dateTime;
             return this;
         }
         public Builder setPriority(int priority) {
@@ -120,7 +132,7 @@ public class Task implements Parcelable {
             return this;
         }
         public Task build() {
-            return new Task(id, title, userId,description, isDone, dueDate,commentlistItemList,priority);
+            return new Task(id, dateTime,title, userId,description, isDone, dueDate,commentlistItemList,priority);
         }
     }
 
@@ -132,6 +144,7 @@ public class Task implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(this.id);
+        dest.writeLong(this.dateTime);
         dest.writeInt(this.priority);
         dest.writeString(this.title);
         dest.writeString(this.userId);
@@ -143,6 +156,7 @@ public class Task implements Parcelable {
 
     protected Task(Parcel in) {
         this.id = in.readLong();
+        this.dateTime = in.readLong();
         this.priority = in.readInt();
         this.title = in.readString();
         this.userId = in.readString();

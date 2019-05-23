@@ -78,13 +78,17 @@ public class AddTaskDialog extends BaseMvpDialog<EditTaskDiologPresenter> implem
     public void createBtnClick() {
 
         if (!taskTitleEd.getText().toString().equals("")) {
+            long time = System.currentTimeMillis();
             getPresenter().saveNewTask(new Task.Builder()
                     .setTitle(taskTitleEd.getText().toString())
+                    .setDateTime(time)
+
                     .setUserId(LoginActivity.user_name)
                     .build());
-          /*  TodoApp.newInstance().getTasksColliction().document(taskTitleEd.getText().toString()).set(new Task.Builder()
+            TodoApp.newInstance().getTasksColliction().document(LoginActivity.user_name + time).set(new Task.Builder()
                     .setTitle(taskTitleEd.getText().toString())
                     .setUserId(LoginActivity.user_name)
+                    .setDateTime(time)
                     .build()).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
@@ -97,7 +101,7 @@ public class AddTaskDialog extends BaseMvpDialog<EditTaskDiologPresenter> implem
                     Timber.d(" onFailure createBtnClick ", e);
 
                 }
-            });*/
+            });
 
         }
 

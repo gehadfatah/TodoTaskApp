@@ -74,10 +74,10 @@ public class TasksFragment extends BaseMvpFragment<TasksPresenter>
         setupRecyclerView();
         UserId = getArguments().getString(UserIdKey);
         getPresenter().setupTasksSubscription2(UserId);
-        taskArrayList = getUserTasksFromFirebase();
+        getUserTasksFromFirebase();
     }
 
-    public ArrayList<Task> getUserTasksFromFirebase() {
+    public void getUserTasksFromFirebase() {
         ArrayList<Task> tasks = new ArrayList<>();
         if (UserId != null)
             TodoApp.newInstance().getTasksColliction().whereEqualTo("userId", UserId)
@@ -91,15 +91,22 @@ public class TasksFragment extends BaseMvpFragment<TasksPresenter>
                                     Task task1 = document.toObject(Task.class);
                                     tasks.add(task1);
                                 }
-                                Log.d(TAG, "success getting documents: ");
-
+                                Log.d(TAG, "success getting documents: " +tasks);
+                                //savetoDatabase(tasks);
                             } else {
                                 Log.d(TAG, "Error getting documents: ", task.getException());
                             }
                         }
                     });
 
-        return tasks;
+    }
+
+    private void savetoDatabase(ArrayList<Task> tasks) {
+        for (Task task :
+                tasks) {
+            getPresenter().saveNewTask(task);
+        }
+
     }
 
     private void setupRecyclerView() {
@@ -144,8 +151,8 @@ public class TasksFragment extends BaseMvpFragment<TasksPresenter>
         noTasksTextView.setVisibility(View.GONE);
         recyclerView.setVisibility(View.VISIBLE);
         tasksAdapter.showTasks(tasks);
-        if (getActivity() != null && NetworkUtils.isNetworkConnected(getActivity()))
-            uploadTasksToFirebase(tasks);
+        //if (getActivity() != null && NetworkUtils.isNetworkConnected(getActivity()))
+        //uploadTasksToFirebase(tasks);
     }
 
     private void uploadTasksToFirebase(List<Task> tasks) {

@@ -222,6 +222,7 @@ public class EditTaskNewFragment extends BaseMvpFragment<EditTaskPresenterNew>
         //here i send just newcomment to save it in comment table
         getPresenter().updateTaskwithcomments(new Task.Builder()
                 .setId(taskToEdit.getId())
+                .setDateTime(taskToEdit.getDateTime())
                 .setTitle(taskToEdit.getTitle())
                 .setIsDone(doneCheckbox.isChecked())
                 .setPriority(spinner.getSelectedItemPosition())
@@ -229,14 +230,18 @@ public class EditTaskNewFragment extends BaseMvpFragment<EditTaskPresenterNew>
                 .setDueDate(dueDateTextView.getText().toString().contains("Date") ? null : taskDate/*LocalDate.parse(dueDateTextView.getText().toString())*/)
                 .setUserId(LoginActivity.user_name)
                 .build());
+
+
         //update document for task in firebase
-        /*TodoApp.newInstance().getTasksColliction().document(taskToEdit.getTitle()).set(new Task.Builder()
-                .setId(taskToEdit.getId())
+        TodoApp.newInstance().getTasksColliction().document(taskToEdit.getUserId() + taskToEdit.getDateTime()).set(new Task.Builder()
+                .setId(taskToEdit.getId()+taskToEdit.getDateTime())
                 .setTitle(taskToEdit.getTitle())
+                .setDateTime(taskToEdit.getDateTime())
+
                 .setIsDone(doneCheckbox.isChecked())
                 .setPriority(spinner.getSelectedItemPosition())
 
-                .setCommentList(*//*getlistComment()*//*getCommentListItemsFromCollectors(commentlistDataCollectors))
+                .setCommentList(getCommentListItemsFromCollectors(commentlistDataCollectors))
                 .setUserId(LoginActivity.user_name)
                 .build()).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -251,7 +256,7 @@ public class EditTaskNewFragment extends BaseMvpFragment<EditTaskPresenterNew>
             }
         });
         //update date
-        updateDateTask();*/
+      //  updateDateTask();
     }
 
     private void updateDateTask() {

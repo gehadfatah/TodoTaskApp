@@ -132,19 +132,30 @@ public class TasksPresenter extends BasePresenter<TasksView> {
                         }, throwable ->
                                 Timber.e(throwable, "Error while deleting task")));
     }
+
     public void updateTaskPriority(Task task) {
         compositeDisposable.add(
                 taskController.updateTaskOnly(task)
                         .compose(RxTransformers.applyCompletableIoSchedulers())
                         .subscribe(() -> {
                             if (task.isDone()) {
-                               // getMvpView().showTaskMarkedAsDoneMessage(task.getTitle());
+                                // getMvpView().showTaskMarkedAsDoneMessage(task.getTitle());
                                 Timber.d("", "");
                             } else {
-                              //  getMvpView().showTaskUnmarkedAsDoneMessage(task.getTitle());
+                                //  getMvpView().showTaskUnmarkedAsDoneMessage(task.getTitle());
                                 Timber.d("", "");
                             }
                         }, throwable ->
                                 Timber.e(throwable, "Error while deleting task")));
+    }
+
+    public void saveNewTask(Task task) {
+        compositeDisposable.add(taskController.saveNewTask(task)
+                .compose(RxTransformers.applyCompletableIoSchedulers())
+                .subscribe(
+                        () -> Timber.d("", ""),
+                        throwable -> Timber.e(throwable, "Error while saving task")
+                )
+        );
     }
 }
